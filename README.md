@@ -4,7 +4,9 @@ Introduction to Radar Course
 Installation
 ============
 
-Welcome to the course material for the Introduction to Radar class. The main lectures come in the form of Jupyter notebooks with interactive elements. The installation instructions currently assume that you are running Windows.
+Welcome to the course material for the Introduction to Radar class. The main lectures come in the form of Jupyter notebooks with interactive elements. 
+
+**Note**: The installation instructions currently assume that you are running Windows.
 
 ## Using `pip`
 

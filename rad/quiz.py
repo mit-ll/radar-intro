@@ -138,17 +138,17 @@ def quiz_1_1_7a():
     
 # Q1.1.7b
 def quiz_1_1_7b():
-    prompt = 'Enter answer (in s):'
+    prompt = 'Enter answer (in s, within ±0.05 s):'
     val = 0.5
-    tol = 0.01
-    new_quiz(prompt, val, rel_tol=tol)
+    tol = 0.05
+    new_quiz(prompt, val, abs_tol=tol)
     
 # Q1.1.7c
 def quiz_1_1_7c():
-    prompt = 'Enter answer (in Hz):'
+    prompt = 'Enter answer (in Hz, within ±0.2 Hz):'
     val = 2
-    tol = 0.01
-    new_quiz(prompt, val, rel_tol=tol) 
+    tol = 0.2
+    new_quiz(prompt, val, abs_tol=tol) 
     
 #-------Lab 1.2: Introduction to Radar-------
     
