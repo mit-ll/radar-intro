@@ -4,30 +4,38 @@ Introduction to Radar Course
 Installation
 ============
 
-Welcome to the course material for the Introduction to Radar class. The main lectures come in the form of Jupyter notebooks with interactive elements. The official method of installation is using `pip`; however, there is an alternate method for users preferring Anaconda.
+Welcome to the course material for the Introduction to Radar class. The main lectures come in the form of Jupyter notebooks with interactive elements. The installation instructions currently assume that you are running Windows.
 
 ## Using `pip`
 
 ### JupyterLab Installation
 
-If you have not, first install Python on your system; you can download the Python installer from [here](https://www.python.org/downloads/). 
+If you have not, first install Python on your system; you can download the Python installer from [here](https://www.python.org/downloads/).
 
 Next, we will have to make a virtual environment to run JupyterLab and the radar course. Create a folder of your choice, and it will now be referred to as `<venv-dir>`. After creating the directory, open a command prompt and run:
 
     cd <venv-dir>
-    python -m venv .
+    py -m venv .
 
-This will create a Python virtual environment in this directory. Next, we will activate the virtual environment. Staying in the `<venv-dir>` directory, run:
+This will create a Python virtual environment in this directory. A *virtual environment* is a minimal, isolated copy of Python that will keep the lab software from interfering with your other Python projects. Next, we will activate the virtual environment. Staying in the `<venv-dir>` directory, run:
 
     .\Scripts\activate
 
-The command prompt should now show that you are in your virtual environment. Next, we will install the necessary prerequisite packages.
+The command prompt should now show that you are in your virtual environment, i.e., if the virtual environment directory was `c:\test`, the command prompt should now look like
+
+    (test) c:\test>
+
+Next, we will install the necessary prerequisite packages. To do this, we use the Python installation routine `pip` by typing:
 
     pip install jupyterlab numpy scipy matplotlib ipympl jupyterlab-mathjax3
-    
+
+**Note**: If you are behind a proxy server at `<proxy-address>`, you will have to run pip using:
+
+    pip install --proxy <proxy-address> jupyterlab numpy scipy matplotlib ipympl jupyterlab-mathjax3
+
 ### Radar Course
 
-Starting with a new terminal/command prompt:
+To start the labs, we first starting with new terminal/command prompt and type:
 
     cd <venv-dir>
     .\Scripts\activate
