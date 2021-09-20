@@ -29,7 +29,7 @@ Next, we will install the necessary prerequisite packages. To do this, we use th
 
     pip install jupyterlab numpy scipy matplotlib ipympl jupyterlab-mathjax3
 
-**Note**: If you are behind a proxy server at `<proxy-address>`, you will have to run pip using:
+**Note**: If you are behind a proxy server at `<proxy-address>`, you will have to run `pip` using:
 
     pip install --proxy <proxy-address> jupyterlab numpy scipy matplotlib ipympl jupyterlab-mathjax3
 
