@@ -565,7 +565,7 @@ def quiz_5_1_1b():
 # Q5.1.1c
 def quiz_5_1_1c():
     prompt = 'Enter transmit gain (in dB):'
-    val = rd.to_db(rd.dish_gain(4, 10E9))
+    val = rd.to_db(rd.dish_gain(2, 10E9))
     tol = 0.01
     new_quiz(prompt, val, rel_tol=tol)
     
