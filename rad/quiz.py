@@ -494,7 +494,7 @@ def quiz_4_1_2b():
     
 # Q4.1.3
 def quiz_4_1_3():
-    prompt = 'Enter cross-range resoluation (in m):'
+    prompt = 'Enter cross-range resolution (in m):'
     val = 50E3*rd.wavelen(3.5E9)/2.1
     tol = 0.01
     new_quiz(prompt, val, rel_tol=tol)
