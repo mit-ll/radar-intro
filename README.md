@@ -1,10 +1,13 @@
-Introduction to Radar Course
-----------------------------
+# Introduction to Radar Course
 
-Installation
-============
+Welcome to the course material for the MIT Lincoln Laboratory *Introduction to Radar* class. The main lectures come in the form of Jupyter notebooks with interactive elements. The easiest way to try out the course is to use the notebooks hosted by [Binder](https://mybinder.org): simply click the launch button below.
 
-Welcome to the course material for the Introduction to Radar class. The main lectures come in the form of Jupyter notebooks with interactive elements. 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mit-ll/radar-intro/HEAD)
+
+# Local Installation
+
+If you would like to keep a working copy of all notebooks and experience the smoothest animations, a local installation is probably the best choice. This can be done quickly by installing Python, creating a virtual environment, and installing the necessary dependencies. Below you will find step-by-step directions for different operating systems.
+
 ## Windows
 
 ### JupyterLab Installation
@@ -141,16 +144,14 @@ Lastly, we can start JupyterLab in the current location:
 
     jupyter lab
 
-Authors
-=======
+# Authors
 
 Zachary Chance, Robert Freking, Victoria Helus
 
 MIT Lincoln Laboratory
 Lexington, MA 02421
 
-Distribution Statement
-======================
+# Distribution Statement
 
 DISTRIBUTION STATEMENT A. Approved for public release. Distribution is unlimited.
 
