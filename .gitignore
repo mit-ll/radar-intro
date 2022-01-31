@@ -32,3 +32,4 @@ _ReSharper*/
 packages/
 rad/__pycache__/
 .ipynb_checkpoints/
+env/
