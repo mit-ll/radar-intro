@@ -157,6 +157,7 @@ def new_plot(*argv, **kwarg):
         frame_on = True,
         projection = projection
         )
+    pyp.ion()
 
     # Format axes
     _format_ax(ax)
@@ -206,6 +207,7 @@ def new_plot2(**kwarg):
         facecolor = face
         )
     fig.canvas.header_visible = False
+    pyp.ion()
     
     # Format axes
     _format_ax(axs)
@@ -313,6 +315,9 @@ def new_plot3(*argv, **kwarg):
     ax.yaxis.set_major_formatter(formatter)
     ax.zaxis.set_major_formatter(formatter)
 
+    # Turn on interaction
+    pyp.ion()
+    
     return fig, ax
 
 def new_plot_text(*argv, **kwarg):
@@ -402,6 +407,9 @@ def new_plot_text(*argv, **kwarg):
     ax.xaxis.set_major_formatter(formatter)
     ax.yaxis.set_major_formatter(formatter)
 
+    # Turn on interaction
+    pyp.ion()
+    
     return fig, ax
 
 def new_rad_plot(*argv, **kwarg):
@@ -425,14 +433,14 @@ def new_rad_plot(*argv, **kwarg):
 
     dpi = 100
     fig_scan = pyp.figure(
-        figsize = (9*110/dpi, 7*110/dpi), 
+        figsize = (9*90/dpi, 7*90/dpi), 
         dpi = dpi,
         edgecolor = edge, 
         facecolor = face
         )
     fig_scan.canvas.header_visible = False
     ax_scan = fig_scan.add_axes(
-        [0.05, 0.025, 0.95, 0.95],
+        [0.05, 0.025, 0.93, 0.93],
         facecolor=face, 
         frame_on=True,
         projection='polar'
@@ -463,5 +471,8 @@ def new_rad_plot(*argv, **kwarg):
         color = edge,
         weight = 'normal'
         )
+    
+    # Turn on interaction
+    pyp.ion()
     
     return fig_scan, ax_scan, fig_pulse, ax_pulse

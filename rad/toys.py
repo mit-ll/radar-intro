@@ -404,7 +404,7 @@ def sine(
     """
 
     # Initialize plot
-    _, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot()
     ax1.set_xlabel(TIME_S_LABEL)
     ax1.set_xlim(xlim)
     ax1.set_ylim(ylim)
@@ -2811,8 +2811,8 @@ def friis(
     # Plot
     def plot(freq, power, radius):
         img = rd.to_db(rd.friis(range_mesh_m, power*1E3, gain=rd.dish_gain(radius, freq*1E6), area=area_mesh_lin))
-        while ax1.artists != []:
-            ax1.artists[0].remove()
+        for art in ax1.artists:
+            art.remove()
         ax1.contourf(range_bin, area_bin, img, np.linspace(-80, 0, 9), cmap='inferno', extend='both')
         fig1.canvas.draw()
    
@@ -4670,8 +4670,8 @@ def radar_range_energy(
     # Plot
     def plot(freq, energy, radius):
         img = rd.to_db(rd.rx_energy(range_mesh_m, energy, freq*1E6, gain=rd.dish_gain(radius, freq*1E6)**2, rcs=rcs_mesh_lin))
-        while ax1.artists != []:
-            ax1.artists[0].remove()
+        for art in ax1.artists:
+            art.remove()
         ax1.contourf(range_bin, rcs_bin, img, np.linspace(-230, -90, 8), cmap='inferno', extend='both')
         fig1.canvas.draw()
    
@@ -4800,8 +4800,8 @@ def radar_range_power(
     # Plot
     def plot(freq, power, radius):
         img = rd.to_db(rd.rx_power(range_mesh_m, power*1E3, freq*1E6, gain=rd.dish_gain(radius, freq*1E6)**2, rcs=rcs_mesh_lin))
-        while ax1.artists != []:
-            ax1.artists[0].remove()
+        for art in ax1.artists:
+            art.remove()
         ax1.contourf(range_bin, rcs_bin, img, np.linspace(-200, -60, 8), cmap='inferno', extend='both')
         fig1.canvas.draw()
    
@@ -4947,8 +4947,8 @@ def radar_range_snr(
     # Plot
     def plot(freq, energy, radius, noise_temp):
         img = rd.to_db(rd.rx_snr(range_mesh_m, energy, freq*1E6, noise_temp, gain=rd.dish_gain(radius, freq*1E6)**2, rcs=rcs_mesh_lin))
-        while ax1.artists != []:
-            ax1.artists[0].remove()
+        for art in ax1.artists:
+            art.remove()
         ax1.contourf(range_bin, rcs_bin, img, np.linspace(-10, 60, 8), cmap='inferno', extend='both')
         fig1.canvas.draw()
    

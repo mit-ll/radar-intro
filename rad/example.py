@@ -166,7 +166,7 @@ def ex_1_2_13():
     
 #-------Lab 2.1: Radar Range Equation-------
 
-# Example 2.1.1
+# Example 2.1.11
 def ex_2_1_1a():
     ts.snr(
         noise_energy=-20,
@@ -175,7 +175,7 @@ def ex_2_1_1a():
         widgets=[]
     )
 
-# Example 2.1.2
+# Example 2.1.1b
 def ex_2_1_1b():
     ts.snr(
         noise_energy=0,
@@ -184,31 +184,31 @@ def ex_2_1_1b():
         widgets=[]
     )
 
-# Example 2.1.3
+# Example 2.1.2
 def ex_2_1_2():
     ts.snr()
     
-# Example 2.1.4
+# Example 2.1.3
 def ex_2_1_3():
     ts.sine_prop()
     
-# Example 2.1.5
+# Example 2.1.4
 def ex_2_1_4():
     ts.friis()
     
-# Example 2.1.6
+# Example 2.1.5
 def ex_2_1_5():
     ts.radar_range_power()
     
-# Example 2.1.7
+# Example 2.1.6
 def ex_2_1_6():
     ts.radar_range_energy()
     
-# Example 2.1.8
+# Example 2.1.7
 def ex_2_1_7():
     ts.radar_range_snr()
 
-# Example 2.1.9
+# Example 2.1.8
 def ex_2_1_8():
     ts.radar_range_det()
     
