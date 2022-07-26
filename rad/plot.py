@@ -121,19 +121,19 @@ def new_plot(*argv, **kwarg):
     if 'axes_height' in kwarg.keys():
         axes_height = kwarg['axes_height']
         
-    projection='rectilinear'
+    projection = 'rectilinear'
     if 'projection' in kwarg.keys():
         projection = kwarg['projection']
+        
+    layout = 'center'
+    if 'layout' in kwarg.keys():
+        layout = kwarg['layout']
     
-    present = False
-    if (present):
-        face = [0, 0, 0]
-        edge = [1, 1, 1]
-    else:
-        face = [1, 1, 1]
-        edge = [0, 0, 0]
+    # Face and edge colors
+    face = [1, 1, 1]
+    edge = [0, 0, 0]
 
-    # Set font to Arial
+    # Set font to available sans serif
     font_prop = {
         'family': 'sans-serif', 
         'sans-serif': DEF_SANS,
@@ -141,8 +141,22 @@ def new_plot(*argv, **kwarg):
         'size' : 14.0
         }
     rc(('font'), **font_prop)
+    
+    # Disable open figure warning
     rc('figure', max_open_warning=0)
 
+    # Avoid double axes
+    pyp.ioff()
+    
+    # Layout
+    if (layout == 'center'):
+        fig_height = 500
+        fig_width = 1050
+    elif (layout == 'sidebar'):
+        fig_height = 700
+        fig_width = 500
+    
+    # Build figure
     dpi = 100
     fig = pyp.figure(
         figsize = (1050/dpi, 500/dpi), 
@@ -157,6 +171,8 @@ def new_plot(*argv, **kwarg):
         frame_on = True,
         projection = projection
         )
+    
+    # Avoid double axes
     pyp.ion()
 
     # Format axes

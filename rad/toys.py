@@ -129,7 +129,7 @@ def array(
     """
 
     # Initialize plot
-    _, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot()
     ax1.set_xlabel(EAST_M_LABEL)
     ax1.set_ylabel(NORTH_M_LABEL)
     ax1.set_xlim(xlim)
@@ -297,7 +297,13 @@ def array(
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT),
+            pane_heights=[0, 5, 1]
+            )
+        )
         
     # Plot
     def animate(frame, rx_az, tx_az, tgt_x, tgt_y):
@@ -478,8 +484,14 @@ def sine(
                
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
-
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT),
+            pane_heights=[0, 3, 1]
+            )
+        )
+        
     # Plot
     def animate(amp, freq, phase):
         wave.set_data(xvec, amp*np.sin(2*np.pi*freq*xvec + (np.pi/180)*phase))
@@ -516,7 +528,7 @@ def radar_wave(
     """
 
     # Initialize plot
-    _, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot()
     ax1.set_xlabel(RANGE_M_LABEL)
     ax1.set_ylabel(WAVE_LABEL)
     ax1.set_xlim(xlim)
@@ -601,7 +613,12 @@ def radar_wave(
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT)
+            )
+        )
 
     # Plot
     def animate(frame, freq):
@@ -680,7 +697,7 @@ def cross_range(
     """
 
     # Initialize plot
-    _, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot()
     ax1.set_xlabel(CROSS_RANGE_M_LABEL)
     ax1.set_ylabel(NORM_ENERGY_DBJ_LABEL)
     ax1.set_xlim(xlim)
@@ -758,7 +775,12 @@ def cross_range(
        
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT)
+            )
+        )
        
     # Plot
     def plot(beamw, r, xr):
@@ -807,7 +829,7 @@ def cw(
     xlim = [min_freq, max_freq]
 
     # Initialize plot
-    _, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot()
     ax1.set_xlabel(REL_FREQ_HZ_LABEL)
     ax1.set_ylabel(NORM_ENERGY_DBJ_LABEL)
     ax1.set_xlim(xlim)
@@ -883,7 +905,12 @@ def cw(
        
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT)
+            )
+        )
        
     # Plot
     def plot(dr, freq, integ_time):
@@ -1134,7 +1161,12 @@ def delay_steer(
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT)
+            )
+        )
 
     # Plot
     def plot(
@@ -1334,7 +1366,12 @@ def detect_game(
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT)
+            )
+        )
     
     # Counters
     guess = [0]
@@ -1978,22 +2015,60 @@ def dish_pat(
     num_samp = 1000
     
     # Initialize plot
-    _, ax_dp = plt.new_plot()
-    ax_dp.set_xlabel('Angle (deg)')
-    ax_dp.set_ylabel(TX_GAIN_DB_LABEL)
-    ax_dp.set_xlim(xlim)
-    ax_dp.set_ylim(ylim)
+    fig1, ax1 = plt.new_plot()
+    ax1.set_xlabel('Angle (deg)')
+    ax1.set_ylabel(TX_GAIN_DB_LABEL)
+    ax1.set_xlim(xlim)
+    ax1.set_ylim(ylim)
     
     # Live text
     if show_beamw:
         dx = xlim[1] - xlim[0]
         dy = ylim[1] - ylim[0]
         beamw0 = rd.dish_beamw(1.0, 1E9)
-        text1 = ax_dp.text(xlim[1] + 0.025*dx, ylim[1] - 0.07*dy, f"Beamwidth: {beamw0:.2f} deg", size=12.0)
+        text1 = ax1.text(xlim[1] + 0.025*dx, ylim[1] - 0.07*dy, f"Beamwidth: {beamw0:.2f} deg", size=12.0)
     
     # Initialize angle vector
     theta = np.linspace(thetalim[0], thetalim[1], num_samp)
     stheta = np.sin(theta)
+    
+    # Controls box
+    controls_box = []
+    
+    # Range rate
+    r_wdg = wdg.FloatSlider(
+        min=0.1, 
+        max=30, 
+        step=0.1, 
+        value=1, 
+        description=DISH_RADIUS_LABEL, 
+        style=LABEL_STYLE, 
+        readout_format='.2f'
+    )
+    controls_box.append(r_wdg)
+        
+    # Integration time
+    freq_wdg = wdg.FloatLogSlider(
+        base=10, 
+        min=2, 
+        max=4, 
+        step=0.01, 
+        value=1E3, 
+        description=FREQ_MHZ_LABEL, 
+        style=LABEL_STYLE, 
+        readout_format='.2f'
+    )
+    controls_box.append(freq_wdg)
+        
+    # Display widgets
+    if controls_box:
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT),
+            pane_heights=[0, 9, 1]
+            )
+        )
     
     # Plot update
     def plot(r, freq):
@@ -2014,15 +2089,21 @@ def dish_pat(
         pat = 20*np.log10(np.abs(rd.dish_pat(u))) + 10*np.log10(rd.dish_gain(r, freq))
         
         # Clear plot
-        [l.remove() for l in ax_dp.lines]
+        for l in ax1.lines:
+            l.remove()
         
         # Plot new
-        ax_dp.plot((180/np.pi)*theta, pat, color='red')
+        ax1.plot((180/np.pi)*theta, pat, color='red')
+    
+    # Initial plot
+    plot(r_wdg.value, freq_wdg.value)
     
     # Add interaction
-    wdg.interact(plot,
-    r=wdg.FloatSlider(min=0.1, max=30, step=0.1, value=1, description=DISH_RADIUS_LABEL, style=LABEL_STYLE, readout_format='.2f'),
-    freq=wdg.FloatLogSlider(base=10, min=2, max=4, step=0.01, value=1E3, description=FREQ_MHZ_LABEL, style=LABEL_STYLE, readout_format='.2f'))    
+    wdg.interactive(
+        plot,
+        r=r_wdg,
+        freq=freq_wdg
+    )    
 
 def doppler(
     dr: float = -300,
@@ -6123,7 +6204,7 @@ def sine_prop(
 def sine_prop_generic(
     freq=200,
     interval=75,
-    num_step=200,
+    num_step=150,
     play_lock=False,
     power=500,
     propvel=1E3,
@@ -6157,7 +6238,9 @@ def sine_prop_generic(
     y_span = ylim[1] - ylim[0]
     
     # Initialize plot
-    _, ax1 = plt.new_plot()
+    pyp.ioff()
+    fig1, ax1 = plt.new_plot()
+    pyp.ion()
     ax1.set_xlabel(RANGE_M_LABEL)
     ax1.set_ylabel(WAVE_LABEL)
     ax1.set_xlim(xlim)
@@ -6257,7 +6340,10 @@ def sine_prop_generic(
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(wdg.AppLayout(
+            center=fig1.canvas, 
+            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT)
+        ))
 
     # Plot
     def animate(frame, freq, power):
@@ -6279,7 +6365,7 @@ def sine_prop_generic(
         truth1.set_ydata(y_truth)
         truth2.set_ydata(-y_truth)
 
-        # Build impulse
+        # Build wave
         y_wave = y_truth*np.sin(2*np.pi*(freq/propvel)*(xvec - propvel*t))
         y_wave[xvec > propvel*t] = 0.0
         wave.set_ydata(y_wave)
@@ -6302,7 +6388,8 @@ def sine_prop_generic(
         freq=freq_wdg,
         power=power_wdg
     ) 
-    
+
+
 def sine_pulse(
     energy: float = 50,
     freq: float = 3,
