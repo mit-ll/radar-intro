@@ -153,13 +153,15 @@ def new_plot(*argv, **kwarg):
         fig_height = 500
         fig_width = 1050
     elif (layout == 'sidebar'):
-        fig_height = 700
-        fig_width = 500
+        fig_height = 500
+        fig_width = 600
+        axes_height = 0.76
+        axes_width = 0.63
     
     # Build figure
     dpi = 100
     fig = pyp.figure(
-        figsize = (1050/dpi, 500/dpi), 
+        figsize = (fig_width/dpi, fig_height/dpi), 
         dpi = dpi,
         edgecolor = edge, 
         facecolor = face

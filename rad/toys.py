@@ -129,12 +129,16 @@ def array(
     """
 
     # Initialize plot
-    fig1, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel(EAST_M_LABEL)
     ax1.set_ylabel(NORTH_M_LABEL)
     ax1.set_xlim(xlim)
     ax1.set_ylim(ylim)
 
+    # Axis spans
+    x_span = xlim[1] - xlim[0]
+    y_span = ylim[1] - ylim[0]    
+    
     # Maximum range
     max_plot_range = calc_max_range(xlim, ylim)
     if not max_range:
@@ -146,7 +150,7 @@ def array(
     dt = (t1 - t0)/(num_step - 1)
 
     # Timestamp 
-    timestamp = ax1.text(xlim[1] + 5, ylim[1] - 12, f"Time: {t0*1000:.2f} ms", size=12.0)
+    timestamp = ax1.text(xlim[1] - 0.33*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E3:.2f} ms", size=12.0)
 
     # Element markers
     x_elem = []
@@ -300,8 +304,8 @@ def array(
         display(
             wdg.AppLayout(
             center=fig1.canvas, 
-            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT),
-            pane_heights=[0, 5, 1]
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
             )
         )
         
@@ -410,7 +414,7 @@ def sine(
     """
 
     # Initialize plot
-    fig1, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel(TIME_S_LABEL)
     ax1.set_xlim(xlim)
     ax1.set_ylim(ylim)
@@ -487,8 +491,8 @@ def sine(
         display(
             wdg.AppLayout(
             center=fig1.canvas, 
-            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT),
-            pane_heights=[0, 3, 1]
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
             )
         )
         
@@ -1993,6 +1997,7 @@ def design(
 
 def dish_pat(
     show_beamw: bool = False,
+    widgets = ['freq', 'range'],
     xlim = [-5, 5],
     ylim = [0, 70]
     ):
@@ -2015,7 +2020,7 @@ def dish_pat(
     num_samp = 1000
     
     # Initialize plot
-    fig1, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel('Angle (deg)')
     ax1.set_ylabel(TX_GAIN_DB_LABEL)
     ax1.set_xlim(xlim)
@@ -2032,41 +2037,55 @@ def dish_pat(
     theta = np.linspace(thetalim[0], thetalim[1], num_samp)
     stheta = np.sin(theta)
     
-    # Controls box
+     # Control widgets
     controls_box = []
-    
-    # Range rate
-    r_wdg = wdg.FloatSlider(
-        min=0.1, 
-        max=30, 
-        step=0.1, 
-        value=1, 
-        description=DISH_RADIUS_LABEL, 
-        style=LABEL_STYLE, 
-        readout_format='.2f'
-    )
-    controls_box.append(r_wdg)
         
-    # Integration time
-    freq_wdg = wdg.FloatLogSlider(
-        base=10, 
-        min=2, 
-        max=4, 
-        step=0.01, 
-        value=1E3, 
-        description=FREQ_MHZ_LABEL, 
-        style=LABEL_STYLE, 
-        readout_format='.2f'
-    )
-    controls_box.append(freq_wdg)
+    # Wave control widgets
+    dish_controls = []
+    
+    # Boresight azimuths
+    if ('freq' in widgets):
+        freq_wdg = wdg.FloatLogSlider(
+            base=10, 
+            min=2, 
+            max=4, 
+            step=0.01, 
+            value=1E3, 
+            description=FREQ_MHZ_LABEL, 
+            style=LABEL_STYLE, 
+            readout_format='.2f'
+        )
+        dish_controls.append(freq_wdg)
+    else:
+        freq_wdg = wdg.fixed(freq)
+        
+    if ('range' in widgets):
+        r_wdg = wdg.FloatSlider(
+            min=0.1, 
+            max=30, 
+            step=0.1, 
+            value=1, 
+            description=DISH_RADIUS_LABEL, 
+            style=LABEL_STYLE, 
+            readout_format='.2f'
+        )
+        dish_controls.append(r_wdg)
+    else:
+        propvel_wdg = wdg.fixed(propvel)
+        
+    dish_box = []
+    if dish_controls:
+        dish_title = [wdg.HTML(value = CONTROL_BLOCK_LABEL)]
+        dish_box = wdg.VBox(dish_title + dish_controls, layout=BOX_LAYOUT)
+        controls_box.append(dish_box)  
         
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
             center=fig1.canvas, 
-            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT),
-            pane_heights=[0, 9, 1]
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
             )
         )
     
@@ -4064,8 +4083,12 @@ def prop_loss(
     (none)
     """
     
+    # Axis spans
+    x_span = xlim[1] - xlim[0]
+    y_span = ylim[1] - ylim[0]
+    
     # Initialize plot
-    _, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel(EAST_M_LABEL)
     ax1.set_ylabel(NORTH_M_LABEL)
     ax1.set_xlim(xlim)
@@ -4082,7 +4105,7 @@ def prop_loss(
     dt = (t1 - t0)/(num_step - 1)
     
     # Timestamp 
-    timestamp = ax1.text(xlim[1] + 5, ylim[1] - 12, f"Time: {t0*1000:.2f} ms", size=12.0)
+    timestamp = ax1.text(xlim[1] - 0.33*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E3:.2f} ms", size=12.0)
 
     # Sensor marker
     cs = ptch.Circle((0, 0), 5, color='blue')
@@ -4159,7 +4182,11 @@ def prop_loss(
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+        ))
     
     # Plot
     def animate(frame, freq):
@@ -5258,25 +5285,29 @@ def ranging(
     """
     
     # Initialize plot
-    _, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel(EAST_M_LABEL)
     ax1.set_ylabel(NORTH_M_LABEL)
     ax1.set_xlim(xlim)
     ax1.set_ylim(ylim)
     
-    # Timestamp
-    timestamp = ax1.text(xlim[1] + 5, ylim[1] - 12, "Time: ---", size=12.0)
+    # Axis spans
+    x_span = xlim[1] - xlim[0]
+    y_span = ylim[1] - ylim[0]
     
     # Maximum range
     max_plot_range = calc_max_range(xlim, ylim)
     if not max_range:
-        max_range = max_plot_range
+        max_range = max_plot_range    
     
     # Time vector
     t0 = 0
     t1 = 2*max_range/propvel
     dt = (t1 - t0)/(num_step - 1)
-    tvec = np.arange(t0, t1, dt)
+    tvec = np.arange(t0, t1, dt)   
+    
+    # Timestamp
+    timestamp = ax1.text(xlim[1] - 0.33*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E3:.2f} ms", size=12.0)
     
     # Sensor marker
     cs = ptch.Circle((0, 0), 5, color='blue')
@@ -5468,7 +5499,11 @@ def ranging(
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+        ))
         
     # Initialize detections
     det_list = []
@@ -6238,21 +6273,19 @@ def sine_prop_generic(
     y_span = ylim[1] - ylim[0]
     
     # Initialize plot
-    pyp.ioff()
-    fig1, ax1 = plt.new_plot()
-    pyp.ion()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel(RANGE_M_LABEL)
     ax1.set_ylabel(WAVE_LABEL)
     ax1.set_xlim(xlim)
     ax1.set_ylim(ylim)
-    
-    # Timestamp
-    timestamp = ax1.text(xlim[1] + 0.02*x_span, ylim[1] - 0.03*y_span, "Time: ---", size=12.0)
 
     # Time vector
     t0 = xlim[0]/propvel
     t1 = xlim[1]/propvel
     dt = (t1 - t0)/(num_step - 1)
+    
+    # Timestamp
+    timestamp = ax1.text(xlim[1] - 0.31*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E3:.2f} ms", size=12.0)
     
     # Wave
     xvec = np.linspace(xlim[0], xlim[1], num_step)
@@ -6342,7 +6375,8 @@ def sine_prop_generic(
     if controls_box:
         display(wdg.AppLayout(
             center=fig1.canvas, 
-            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT)
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
         ))
 
     # Plot
@@ -6883,19 +6917,23 @@ def wave(
     """
 
     # Initialize plot
-    _, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel(RANGE_M_LABEL)
     ax1.set_ylabel(WAVE_LABEL)
     ax1.set_xlim(xlim)
     ax1.set_ylim(ylim)
 
+    # Axis spans
+    x_span = xlim[1] - xlim[0]
+    y_span = ylim[1] - ylim[0]
+    
     # Time vector
     t0 = 0
     t1 = 2/500
     dt = (t1 - t0)/(num_step - 1)
     
     # Timestamp
-    timestamp = ax1.text(xlim[1] + 0.1, ylim[1] - 0.2, f"Time: {t0*1E3:.2f} ms", size=12.0)
+    timestamp = ax1.text(xlim[1] - 0.31*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E3:.2f} ms", size=12.0)
 
     # Wave value marker
     wave_val = ptch.Circle((0, 0), 0.1, color='pink')
@@ -6978,8 +7016,11 @@ def wave(
         controls_box.append(run_box)   
         
     # Display widgets
-    if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+        ))
 
     # Plot
     def animate(frame, freq, propvel):
