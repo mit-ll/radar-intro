@@ -532,12 +532,16 @@ def radar_wave(
     """
 
     # Initialize plot
-    fig1, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel(RANGE_M_LABEL)
     ax1.set_ylabel(WAVE_LABEL)
     ax1.set_xlim(xlim)
     ax1.set_ylim(ylim)
  
+    # Axis spans
+    x_span = xlim[1] - xlim[0]
+    y_span = ylim[1] - ylim[0]  
+
     # Propagation velocity
     propvel = 3E8
     
@@ -547,7 +551,7 @@ def radar_wave(
     dt = (t1 - t0)/(num_step - 1)
     
     # Timestamp 
-    timestamp = ax1.text(xlim[1] + 0.1, ylim[1] - 0.2, f"Time: {t0*1E9:.2f} ns", size=12.0)
+    timestamp = ax1.text(xlim[1] - 0.33*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E9:.2f} ns", size=12.0)
 
     # Wave value marker
     wave_val = ptch.Circle((0, 0), 0.1, color='pink')
@@ -620,7 +624,8 @@ def radar_wave(
         display(
             wdg.AppLayout(
             center=fig1.canvas, 
-            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT)
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
             )
         )
 
@@ -2164,11 +2169,15 @@ def doppler(
     """
 
     # Initialize plot
-    _, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel(EAST_M_LABEL)
     ax1.set_ylabel(NORTH_M_LABEL)
     ax1.set_xlim(xlim)
     ax1.set_ylim(ylim)
+    
+    # Axis spans
+    x_span = xlim[1] - xlim[0]
+    y_span = ylim[1] - ylim[0]       
     
     # Maximum range
     max_plot_range = calc_max_range(xlim, ylim)
@@ -2181,7 +2190,7 @@ def doppler(
     dt = (t1 - t0)/(num_step - 1)
 
     # Timestamp 
-    timestamp = ax1.text(xlim[1] + 5, ylim[1] - 12, f"Time: {t0*1E3:.2f} ms", size=12.0)
+    timestamp = ax1.text(xlim[1] - 0.33*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E3:.2f} ms", size=12.0)
 
     # Sensor marker
     cs = ptch.Circle((0, 0), 5, color='blue')
@@ -2327,7 +2336,13 @@ def doppler(
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+            )
+        )
         
     # Plot
     r_peak = np.zeros((num_cycle))
