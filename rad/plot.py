@@ -157,6 +157,11 @@ def new_plot(*argv, **kwarg):
         fig_width = 600
         axes_height = 0.76
         axes_width = 0.63
+    elif (layout == 'sidebar-colorbar'):
+        fig_height = 500
+        fig_width = 700
+        axes_height = 0.76
+        axes_width = 0.67
     
     # Build figure
     dpi = 100

@@ -388,280 +388,7 @@ def array(
         tgt_y=y_wdg
     )
 
-def sine(
-    amp: float = 0,
-    freq: float = 0,
-    num_step: int = 500,
-    phase: float = 0,
-    widgets = ['amp', 'freq', 'phase'],
-    xlim = [0, 10],
-    ylim = [-10, 10]
-    ):
-    """
-    Sine wave display.
-    
-    Inputs:
-    - amp [float]: Wave amplitude (V); default 0 V
-    - freq [float]: Wave frequency (Hz); default 0 Hz
-    - num_step [int]: Number of animation steps; default 500
-    - phase [float]: Wave phase (deg); default 0 deg
-    - widgets [List[str]]: List of desired widgets
-    - xlim [List[float]]: x-axis limits for plotting (s)
-    - ylim [List[float]]: y-axis limits for plotting (V)
-    
-    Outputs:
-    (none)
-    """
 
-    # Initialize plot
-    fig1, ax1 = plt.new_plot(layout='sidebar')
-    ax1.set_xlabel(TIME_S_LABEL)
-    ax1.set_xlim(xlim)
-    ax1.set_ylim(ylim)
-
-    # Time vector
-    t0 = 0
-    t1 = 10
-    dt = (t1 - t0)/(num_step - 1)
-
-    # Wave
-    xvec = np.linspace(xlim[0], xlim[1], num_step)
-    ax1.plot(xlim, [0, 0], color='gray', alpha=0.2)
-    wave = ax1.plot(xvec, amp*np.sin(2*np.pi*freq*xvec + (np.pi/180)*phase), color='red', linewidth=1.0)[0]
-        
-    # Control widgets
-    controls_box = []
-        
-    # Wave control widgets
-    wave_controls = []
-    
-    # Amplitude
-    if ('amp' in widgets):
-        amp_wdg = wdg.FloatSlider(
-            min=0, 
-            max=10, 
-            step=0.5, 
-            value=amp, 
-            description="Amplitude", 
-            style=LABEL_STYLE, 
-            readout_format='.2f'
-        )
-        wave_controls.append(amp_wdg)
-    else:
-        amp_wdg = wdg.fixed(amp)
-        
-    # Frequency
-    if ('freq' in widgets):
-        freq_wdg = wdg.FloatSlider(
-            min=0, 
-            max=2, 
-            step=0.05, 
-            value=freq, 
-            description=FREQ_HZ_LABEL, 
-            style=LABEL_STYLE, 
-            readout_format='.2f'
-        )
-        wave_controls.append(freq_wdg)
-    else:
-        freq_wdg = wdg.fixed(freq)
-        
-    # Phase
-    if ('phase' in widgets):
-        phase_wdg = wdg.FloatSlider(
-            min=0, 
-            max=360, 
-            step=1, 
-            value=phase, 
-            description="Initial Phase (deg)", 
-            style=LABEL_STYLE, 
-            readout_format='.2f'
-        )
-        wave_controls.append(phase_wdg)
-    else:
-        phase_wdg = wdg.fixed(phase)
-        
-    wave_box = []
-    if wave_controls:
-        wave_title = [wdg.HTML(value = CONTROL_BLOCK_LABEL)]
-        wave_box = wdg.VBox(wave_title + wave_controls, layout=BOX_LAYOUT)
-        controls_box.append(wave_box)
-               
-    # Display widgets
-    if controls_box:
-        display(
-            wdg.AppLayout(
-            center=fig1.canvas, 
-            right_sidebar=wdg.VBox(controls_box),
-            pane_widths=[0, '600px', '350px']
-            )
-        )
-        
-    # Plot
-    def animate(amp, freq, phase):
-        wave.set_data(xvec, amp*np.sin(2*np.pi*freq*xvec + (np.pi/180)*phase))
-    
-    # Add interaction
-    wdg.interactive(
-        animate, 
-        amp=amp_wdg,
-        freq=freq_wdg, 
-        phase=phase_wdg
-    )
-    
-def radar_wave(
-    interval: float = 50,
-    num_step: int = 500,
-    play_lock: bool = False,
-    widgets = ['freq', 'run'],
-    xlim = [0, 4],
-    ylim = [-2, 2]
-    ):
-    """
-    Wavelength display for radar.
-    
-    Inputs:
-    - interval [float]: Time between animation steps (ms); default 50 ms
-    - num_step [int]: Number of animation steps; default 500 steps
-    - play_lock [bool]: Flag for locking widgets while playing; default False
-    - widgets [List[str]]: List of desired widgets
-    - xlim [List[float]]: x-axis limits for plotting (m)
-    - ylim [List[float]]: y-axis limits for plotting (V)
-    
-    Outputs:
-    (none)
-    """
-
-    # Initialize plot
-    fig1, ax1 = plt.new_plot(layout='sidebar')
-    ax1.set_xlabel(RANGE_M_LABEL)
-    ax1.set_ylabel(WAVE_LABEL)
-    ax1.set_xlim(xlim)
-    ax1.set_ylim(ylim)
- 
-    # Axis spans
-    x_span = xlim[1] - xlim[0]
-    y_span = ylim[1] - ylim[0]  
-
-    # Propagation velocity
-    propvel = 3E8
-    
-    # Time vector
-    t0 = 0
-    t1 = xlim[1]/propvel
-    dt = (t1 - t0)/(num_step - 1)
-    
-    # Timestamp 
-    timestamp = ax1.text(xlim[1] - 0.33*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E9:.2f} ns", size=12.0)
-
-    # Wave value marker
-    wave_val = ptch.Circle((0, 0), 0.1, color='pink')
-    ax1.add_patch(wave_val)
-    
-    # Wave
-    xvec = np.linspace(xlim[0], xlim[1], num_step)
-    wave = ax1.plot(xvec, np.zeros((num_step,)), color='red', linewidth=3.0)[0]
-        
-    # Control widgets
-    controls_box = []
-        
-    # Wave control widgets
-    wave_controls = []
-    
-    # Boresight azimuths
-    if ('freq' in widgets):
-        freq_wdg = wdg.FloatLogSlider(
-            min=1, 
-            max=4, 
-            step=0.01, 
-            value=2, 
-            description=FREQ_MHZ_LABEL, 
-            style=LABEL_STYLE, 
-            readout_format='.2f'
-        )
-        wave_controls.append(freq_wdg)
-    else:
-        freq_wdg = wdg.fixed(freq)
-        
-    wave_box = []
-    if wave_controls:
-        wave_title = [wdg.HTML(value = CONTROL_BLOCK_LABEL)]
-        wave_box = wdg.VBox(wave_title + wave_controls, layout=BOX_LAYOUT)
-        controls_box.append(wave_box)
-        
-    # Run widgets
-    run_controls = []
-    if ('run' in widgets):
-        play_wdg = wdg.Play(
-            interval=interval,
-            value=1,
-            min=1,
-            max=num_step,
-            step=1,
-            description=RUN_LABEL,
-            disabled=False
-        )
-        run_controls.append(play_wdg)
-        slider_wdg = wdg.IntSlider(
-            value=1,
-            min=1,
-            max=num_step,
-            step=1,
-            description=FRAME_LABEL,
-            readout=False,
-            disabled=False
-        )
-        wdg.jslink((play_wdg, 'value'), (slider_wdg, 'value'))
-        run_controls.append(slider_wdg)
-        
-    run_box = []
-    if run_controls:
-        run_title = [wdg.HTML(value = RUN_BLOCK_LABEL)]
-        run_box = wdg.VBox(run_title + run_controls, layout=BOX_LAYOUT)
-        controls_box.append(run_box)   
-        
-    # Display widgets
-    if controls_box:
-        display(
-            wdg.AppLayout(
-            center=fig1.canvas, 
-            right_sidebar=wdg.VBox(controls_box),
-            pane_widths=[0, '600px', '350px']
-            )
-        )
-
-    # Plot
-    def animate(frame, freq):
-
-        # Time
-        t = t0 + (frame - 1)*dt
-
-        # Update timestamp
-        timestamp.set_text(f"Time: {t*1E9:.2f} ns")
- 
-        wave_amp = np.cos(2*np.pi*(1E6*freq/propvel)*(xvec - propvel*t))
-        wave_amp[xvec > propvel*t] = 0.0
-
-        wave_val.center = 0, wave_amp[0]
-        wave.set_ydata(wave_amp)
-        
-        # Disable controls during play
-        if (play_lock):
-            if (frame > 1):
-                for w in wave_controls:
-                    if not w.disabled:
-                        w.disabled = True
-            elif (frame == 1):
-                for w in wave_controls:
-                    if w.disabled:
-                        w.disabled = False
-    
-    # Add interaction
-    wdg.interactive(
-        animate, 
-        frame=slider_wdg,
-        freq=freq_wdg
-    )    
-    
 def calc_max_range(xlim, ylim):
     """
     Maximum plot range.
@@ -679,7 +406,8 @@ def calc_max_range(xlim, ylim):
     r = np.maximum(r, np.sqrt(xlim[0]**2 + ylim[1]**2))
     r = np.maximum(r, np.sqrt(xlim[1]**2 + ylim[1]**2))
     return r
-    
+
+
 def cross_range(
     beamw: float = 0.5,
     num_bins: int = 500,
@@ -804,7 +532,8 @@ def cross_range(
         r=r_wdg,
         xr=xr_wdg
     )
-    
+
+
 def cw(
     freq: float = 1.0E3,
     integ_time: float = 5,
@@ -935,7 +664,8 @@ def cw(
         freq=freq_wdg,
         integ_time=integ_time_wdg
     ) 
-    
+
+
 def delay_steer(
     az: float = 0,
     freq: float = 5E2,
@@ -1279,6 +1009,7 @@ def delay_steer(
     
     reset_btn.on_click(reset_delays)
 
+
 def detect_game(
     n = 40, 
     snr = 10
@@ -1508,6 +1239,7 @@ def detect_game(
     reset_btn.on_click(reset_game)
     det_btn.on_click(det_input)
     nodet_btn.on_click(nodet_input)
+
 
 def design(
     bandw=1,
@@ -2000,6 +1732,7 @@ def design(
         scan_rate=scan_rate_wdg
     )
 
+
 def dish_pat(
     show_beamw: bool = False,
     widgets = ['freq', 'range'],
@@ -2128,6 +1861,7 @@ def dish_pat(
         r=r_wdg,
         freq=freq_wdg
     )    
+
 
 def doppler(
     dr: float = -300,
@@ -2428,6 +2162,7 @@ def doppler(
         r=r_wdg,
         dr=dr_wdg
     )
+
 
 def ekf(
     bandw=1,
@@ -2808,7 +2543,8 @@ def ekf(
         north_cov_down.set_ydata(3*-np.sqrt(P[1, 1, :]))
         
     new_btn.on_click(new_run)
-    
+
+
 def friis(
     freq=1E3,
     num_area=100,
@@ -2837,7 +2573,7 @@ def friis(
     """
 
     # Initialize plot
-    fig1, ax1 = plt.new_plot(axes_width=0.5)
+    fig1, ax1 = plt.new_plot(layout='sidebar-colorbar')
     ax1.set_xlabel(RANGE_KM_LABEL)
     ax1.set_ylabel('Receive Aperture Area (dBsm)')
     ax1.set_xlim(xlim)
@@ -2921,7 +2657,13 @@ def friis(
        
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '700px', '350px']
+            )
+        )
        
     # Plot
     def plot(freq, power, radius):
@@ -2938,6 +2680,7 @@ def friis(
         power=power_wdg,
         radius=radius_wdg
     )
+
 
 def gnn(
     det_acc: float = 10,
@@ -3209,7 +2952,8 @@ def gnn(
     new_btn.on_click(new_scene)
     nn_btn.on_click(nn_click)
     gnn_btn.on_click(gnn_click)
- 
+
+
 def lfm(
     energy: float = 50,
     num_bins: int = 1000,
@@ -3352,6 +3096,7 @@ def lfm(
         stop_freq=stop_freq_wdg,
         pulsewidth=pulsewidth_wdg
     )
+
 
 def matched_filter(
     delay: float = 0,
@@ -3520,6 +3265,7 @@ def matched_filter(
         stop_freq=stop_freq_wdg,
         pulsewidth=pulsewidth_wdg
     )
+
 
 def phase_steer(
     az: float = 0,
@@ -3861,6 +3607,7 @@ def phase_steer(
     # Reset button
     reset_btn.on_click(reset_phases)
 
+
 def pol(
     freq: float = 500.0,
     imag: float = 0.0,
@@ -4068,7 +3815,8 @@ def pol(
         vh=vh_wdg,
         imag=imag_wdg
     )    
-    
+
+
 def prop_loss(
     freq: float = 100,
     interval: float = 100,
@@ -4247,6 +3995,7 @@ def prop_loss(
         frame=slider_wdg,
         freq=freq_wdg
     )    
+
 
 def propagation(
     dx: float = 10,
@@ -4456,7 +4205,8 @@ def propagation(
         x=x_wdg,
         y=y_wdg
     )
-    
+
+
 def radar_range_det(
     energy=1E2,
     freq=1E3,
@@ -4490,7 +4240,7 @@ def radar_range_det(
     """
 
     # Initialize plot
-    _, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel('Delay (ms)')
     ax1.set_ylabel('Energy (dBJ)')
     ax1.set_xlim(xlim)
@@ -4622,7 +4372,13 @@ def radar_range_det(
        
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+            )
+        )
        
     # First plot
     noise_energy = rd.noise_energy(noise_temp)
@@ -4637,14 +4393,13 @@ def radar_range_det(
     
     if highlight:
         echo_line = ax1.plot([r, r], [ylim[0], 2*rd.to_db(y[r_bin])], color='black', linewidth=3.0)[0]
-        
-    
+
     # Live text
     dx = xlim[1] - xlim[0]
     dy = ylim[1] - ylim[0]
     snr0 = signal_energy/noise_energy
     snr0_db = 10*np.log10(snr0)
-    text1 = ax1.text(xlim[1] + 0.025*dx, ylim[1] - 0.07*dy, f"SNR: {snr0_db:.2f} dB", size=12.0)
+    text1 = ax1.text(xlim[1] - 0.31*dx, ylim[1] - 0.06*dy, f"SNR: {snr0_db:.2f} dB", size=12.0)
     
     # Plot
     def plot(freq, energy, radius, noise_temp, rcs, r):
@@ -4675,7 +4430,8 @@ def radar_range_det(
         r=r_wdg,
         rcs=rcs_wdg
     )    
-    
+
+
 def radar_range_energy(
     energy=1E2,
     freq=1E3,
@@ -4704,7 +4460,7 @@ def radar_range_energy(
     """
 
     # Initialize plot
-    fig1, ax1 = plt.new_plot(axes_width=0.5)
+    fig1, ax1 = plt.new_plot(layout='sidebar-colorbar')
     ax1.set_xlabel(RANGE_KM_LABEL)
     ax1.set_ylabel(RCS_DBSM_LABEL)
     ax1.set_xlim(xlim)
@@ -4788,7 +4544,13 @@ def radar_range_energy(
        
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '700px', '350px']
+            )
+        )
        
     # Plot
     def plot(freq, energy, radius):
@@ -4805,7 +4567,8 @@ def radar_range_energy(
         energy=energy_wdg,
         radius=radius_wdg
     )
-    
+
+
 def radar_range_power(
     freq=1E3,
     num_range=100,
@@ -4834,7 +4597,7 @@ def radar_range_power(
     """
 
     # Initialize plot
-    fig1, ax1 = plt.new_plot(axes_width=0.5)
+    fig1, ax1 = plt.new_plot(layout='sidebar-colorbar')
     ax1.set_xlabel(RANGE_KM_LABEL)
     ax1.set_ylabel(RCS_DBSM_LABEL)
     ax1.set_xlim(xlim)
@@ -4918,7 +4681,13 @@ def radar_range_power(
        
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '700px', '350px']
+            )
+        )
        
     # Plot
     def plot(freq, power, radius):
@@ -4935,7 +4704,8 @@ def radar_range_power(
         power=power_wdg,
         radius=radius_wdg
     )
-    
+
+
 def radar_range_snr(
     energy=1E2,
     freq=1E3,
@@ -4966,7 +4736,7 @@ def radar_range_snr(
     """
 
     # Initialize plot
-    fig1, ax1 = plt.new_plot(axes_width=0.5)
+    fig1, ax1 = plt.new_plot(layout='sidebar-colorbar')
     ax1.set_xlabel(RANGE_KM_LABEL)
     ax1.set_ylabel(RCS_DBSM_LABEL)
     ax1.set_xlim(xlim)
@@ -5065,7 +4835,13 @@ def radar_range_snr(
        
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '700px', '350px']
+            )
+        )
        
     # Plot
     def plot(freq, energy, radius, noise_temp):
@@ -5083,7 +4859,163 @@ def radar_range_snr(
         radius=radius_wdg,
         noise_temp=noise_temp_wdg
     )    
+
+
+def radar_wave(
+    interval: float = 50,
+    num_step: int = 500,
+    play_lock: bool = False,
+    widgets = ['freq', 'run'],
+    xlim = [0, 4],
+    ylim = [-2, 2]
+    ):
+    """
+    Wavelength display for radar.
     
+    Inputs:
+    - interval [float]: Time between animation steps (ms); default 50 ms
+    - num_step [int]: Number of animation steps; default 500 steps
+    - play_lock [bool]: Flag for locking widgets while playing; default False
+    - widgets [List[str]]: List of desired widgets
+    - xlim [List[float]]: x-axis limits for plotting (m)
+    - ylim [List[float]]: y-axis limits for plotting (V)
+    
+    Outputs:
+    (none)
+    """
+
+    # Initialize plot
+    fig1, ax1 = plt.new_plot(layout='sidebar')
+    ax1.set_xlabel(RANGE_M_LABEL)
+    ax1.set_ylabel(WAVE_LABEL)
+    ax1.set_xlim(xlim)
+    ax1.set_ylim(ylim)
+ 
+    # Axis spans
+    x_span = xlim[1] - xlim[0]
+    y_span = ylim[1] - ylim[0]  
+
+    # Propagation velocity
+    propvel = 3E8
+    
+    # Time vector
+    t0 = 0
+    t1 = xlim[1]/propvel
+    dt = (t1 - t0)/(num_step - 1)
+    
+    # Timestamp 
+    timestamp = ax1.text(xlim[1] - 0.33*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E9:.2f} ns", size=12.0)
+
+    # Wave value marker
+    wave_val = ptch.Circle((0, 0), 0.1, color='pink')
+    ax1.add_patch(wave_val)
+    
+    # Wave
+    xvec = np.linspace(xlim[0], xlim[1], num_step)
+    wave = ax1.plot(xvec, np.zeros((num_step,)), color='red', linewidth=3.0)[0]
+        
+    # Control widgets
+    controls_box = []
+        
+    # Wave control widgets
+    wave_controls = []
+    
+    # Boresight azimuths
+    if ('freq' in widgets):
+        freq_wdg = wdg.FloatLogSlider(
+            min=1, 
+            max=4, 
+            step=0.01, 
+            value=2, 
+            description=FREQ_MHZ_LABEL, 
+            style=LABEL_STYLE, 
+            readout_format='.2f'
+        )
+        wave_controls.append(freq_wdg)
+    else:
+        freq_wdg = wdg.fixed(freq)
+        
+    wave_box = []
+    if wave_controls:
+        wave_title = [wdg.HTML(value = CONTROL_BLOCK_LABEL)]
+        wave_box = wdg.VBox(wave_title + wave_controls, layout=BOX_LAYOUT)
+        controls_box.append(wave_box)
+        
+    # Run widgets
+    run_controls = []
+    if ('run' in widgets):
+        play_wdg = wdg.Play(
+            interval=interval,
+            value=1,
+            min=1,
+            max=num_step,
+            step=1,
+            description=RUN_LABEL,
+            disabled=False
+        )
+        run_controls.append(play_wdg)
+        slider_wdg = wdg.IntSlider(
+            value=1,
+            min=1,
+            max=num_step,
+            step=1,
+            description=FRAME_LABEL,
+            readout=False,
+            disabled=False
+        )
+        wdg.jslink((play_wdg, 'value'), (slider_wdg, 'value'))
+        run_controls.append(slider_wdg)
+        
+    run_box = []
+    if run_controls:
+        run_title = [wdg.HTML(value = RUN_BLOCK_LABEL)]
+        run_box = wdg.VBox(run_title + run_controls, layout=BOX_LAYOUT)
+        controls_box.append(run_box)   
+        
+    # Display widgets
+    if controls_box:
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+            )
+        )
+
+    # Plot
+    def animate(frame, freq):
+
+        # Time
+        t = t0 + (frame - 1)*dt
+
+        # Update timestamp
+        timestamp.set_text(f"Time: {t*1E9:.2f} ns")
+ 
+        wave_amp = np.cos(2*np.pi*(1E6*freq/propvel)*(xvec - propvel*t))
+        wave_amp[xvec > propvel*t] = 0.0
+
+        wave_val.center = 0, wave_amp[0]
+        wave.set_ydata(wave_amp)
+        
+        # Disable controls during play
+        if (play_lock):
+            if (frame > 1):
+                for w in wave_controls:
+                    if not w.disabled:
+                        w.disabled = True
+            elif (frame == 1):
+                for w in wave_controls:
+                    if w.disabled:
+                        w.disabled = False
+    
+    # Add interaction
+    wdg.interactive(
+        animate, 
+        frame=slider_wdg,
+        freq=freq_wdg
+    )    
+    
+
 def range_res(
     num_bins: int = 1000,
     pulsewidth: float = 5,
@@ -5256,6 +5188,7 @@ def range_res(
         stop_freq=stop_freq_wdg,
         pulsewidth=pulsewidth_wdg
     )
+
 
 def ranging(
     interval=75,
@@ -5636,7 +5569,8 @@ def ranging(
         tgt_x=x_wdg,
         tgt_y=y_wdg
     )
-    
+
+
 def rdi(
     bandw: float = 1.0,
     dr: float = 0.0,
@@ -5831,6 +5765,7 @@ def rdi(
         prf=prf_wdg
     )    
 
+
 def rect_pat(
     freq: float = 1.0E3,
     height: float = 1.0,
@@ -5972,7 +5907,8 @@ def rect_pat(
         height=height_wdg,
         width=width_wdg
     )    
-    
+
+
 def roc(
     num_samp: int = 1000,
     snr: float = 10,
@@ -6054,6 +5990,128 @@ def roc(
         plot, 
         snr=snr_wdg
     )
+
+
+def sine(
+    amp: float = 0,
+    freq: float = 0,
+    num_step: int = 500,
+    phase: float = 0,
+    widgets = ['amp', 'freq', 'phase'],
+    xlim = [0, 10],
+    ylim = [-10, 10]
+    ):
+    """
+    Sine wave display.
+    
+    Inputs:
+    - amp [float]: Wave amplitude (V); default 0 V
+    - freq [float]: Wave frequency (Hz); default 0 Hz
+    - num_step [int]: Number of animation steps; default 500
+    - phase [float]: Wave phase (deg); default 0 deg
+    - widgets [List[str]]: List of desired widgets
+    - xlim [List[float]]: x-axis limits for plotting (s)
+    - ylim [List[float]]: y-axis limits for plotting (V)
+    
+    Outputs:
+    (none)
+    """
+
+    # Initialize plot
+    fig1, ax1 = plt.new_plot(layout='sidebar')
+    ax1.set_xlabel(TIME_S_LABEL)
+    ax1.set_xlim(xlim)
+    ax1.set_ylim(ylim)
+
+    # Time vector
+    t0 = 0
+    t1 = 10
+    dt = (t1 - t0)/(num_step - 1)
+
+    # Wave
+    xvec = np.linspace(xlim[0], xlim[1], num_step)
+    ax1.plot(xlim, [0, 0], color='gray', alpha=0.2)
+    wave = ax1.plot(xvec, amp*np.sin(2*np.pi*freq*xvec + (np.pi/180)*phase), color='red', linewidth=1.0)[0]
+        
+    # Control widgets
+    controls_box = []
+        
+    # Wave control widgets
+    wave_controls = []
+    
+    # Amplitude
+    if ('amp' in widgets):
+        amp_wdg = wdg.FloatSlider(
+            min=0, 
+            max=10, 
+            step=0.5, 
+            value=amp, 
+            description="Amplitude", 
+            style=LABEL_STYLE, 
+            readout_format='.2f'
+        )
+        wave_controls.append(amp_wdg)
+    else:
+        amp_wdg = wdg.fixed(amp)
+        
+    # Frequency
+    if ('freq' in widgets):
+        freq_wdg = wdg.FloatSlider(
+            min=0, 
+            max=2, 
+            step=0.05, 
+            value=freq, 
+            description=FREQ_HZ_LABEL, 
+            style=LABEL_STYLE, 
+            readout_format='.2f'
+        )
+        wave_controls.append(freq_wdg)
+    else:
+        freq_wdg = wdg.fixed(freq)
+        
+    # Phase
+    if ('phase' in widgets):
+        phase_wdg = wdg.FloatSlider(
+            min=0, 
+            max=360, 
+            step=1, 
+            value=phase, 
+            description="Initial Phase (deg)", 
+            style=LABEL_STYLE, 
+            readout_format='.2f'
+        )
+        wave_controls.append(phase_wdg)
+    else:
+        phase_wdg = wdg.fixed(phase)
+        
+    wave_box = []
+    if wave_controls:
+        wave_title = [wdg.HTML(value = CONTROL_BLOCK_LABEL)]
+        wave_box = wdg.VBox(wave_title + wave_controls, layout=BOX_LAYOUT)
+        controls_box.append(wave_box)
+               
+    # Display widgets
+    if controls_box:
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+            )
+        )
+        
+    # Plot
+    def animate(amp, freq, phase):
+        wave.set_data(xvec, amp*np.sin(2*np.pi*freq*xvec + (np.pi/180)*phase))
+    
+    # Add interaction
+    wdg.interactive(
+        animate, 
+        amp=amp_wdg,
+        freq=freq_wdg, 
+        phase=phase_wdg
+    )
+    
     
 def sine_prop(
     freq: float = 50,
@@ -6097,9 +6155,9 @@ def sine_prop(
         wave_str = 'Wave (' + wave_label + ')'
     else:
         wave_str = 'Wave'
-
+    
     # Initialize plot
-    _, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel(RANGE_M_LABEL)
     ax1.set_ylabel(wave_str)
     ax1.set_xlim(xlim)
@@ -6122,7 +6180,7 @@ def sine_prop(
         time_scalar = 1E9
 
     # Timestamp
-    timestamp = ax1.text(xlim[1] + 0.02*x_span, ylim[1] - 0.03*y_span, f"Time: {t0*time_scalar:.2f} {time_label}", size=12.0)
+    timestamp = ax1.text(xlim[1] - 0.31*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*time_scalar:.2f} {time_label}", size=12.0)
 
     # Wave
     xvec = np.linspace(xlim[0], xlim[1], num_step)
@@ -6210,7 +6268,11 @@ def sine_prop(
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+        ))
 
     # Plot
     def animate(frame, freq, power):
@@ -6250,7 +6312,8 @@ def sine_prop(
         freq=freq_wdg,
         power=power_wdg
     ) 
-    
+
+
 def sine_prop_generic(
     freq=200,
     interval=75,
@@ -6641,6 +6704,7 @@ def sine_pulse(
         pulsewidth=pulsewidth_wdg
     )    
 
+
 def snr(
     noise_energy: float = -20,
     num_samp: int = 1000,
@@ -6666,8 +6730,12 @@ def snr(
     (none)
     """
 
+    # Axis spans
+    x_span = xlim[1] - xlim[0]
+    y_span = ylim[1] - ylim[0]       
+    
     # Initialize plot
-    _, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel('Time (ms)')
     ax1.set_ylabel('Energy (dBJ)')
     ax1.set_xlim(xlim)
@@ -6675,10 +6743,8 @@ def snr(
    
     # Live text
     if show_snr:
-        dx = xlim[1] - xlim[0]
-        dy = ylim[1] - ylim[0]
         snr0_db = signal_energy - noise_energy
-        text1 = ax1.text(xlim[1] + 0.025*dx, ylim[1] - 0.07*dy, "SNR: {val_db:.2f} dB".format(val_db=snr0_db), size=12.0)
+        text1 = ax1.text(xlim[1] - 0.33*x_span, ylim[1] - 0.06*y_span, f"SNR: {snr0_db:.2f} dB", size=12.0)
 
     # Control widgets
     controls_box = []
@@ -6724,7 +6790,20 @@ def snr(
        
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+            )
+        )
+    else:
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            pane_widths=[0, '600px', 0]
+            )
+        )
        
     # First plot
     tvec = np.linspace(0, 100, num_samp)
@@ -6745,7 +6824,8 @@ def snr(
         noise_energy=noise_wdg,
         signal_energy=signal_wdg
     )
-      
+
+
 def threshold(
     n: int = 50,
     thresh: float = 0,
@@ -6901,7 +6981,8 @@ def threshold(
     wdg.interactive(threshold_update, thresh=thresh_wdg)
     
     new_btn.on_click(new_data)
-    
+
+
 def wave(
     freq=1000,
     interval=50,
