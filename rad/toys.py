@@ -708,9 +708,6 @@ def delay_steer(
     total_ax.set_xlim(xlim)
     total_ax.set_ylim([-5, 5])
     
-    # Timestamp
-    rel_energy = fig.text(0.82, 0.9, "Energy Loss: ---", size=12.0)
-    
     # Number of elements
     num_elem = 5
     
@@ -746,9 +743,19 @@ def delay_steer(
     
     # Total
     total_line = total_ax.plot(xvec, total_y, linewidth=3.0, color='red')[0]
-        
+
     # Control widgets
     controls_box = []
+    
+    # Properties
+    disp_props = []
+        
+     # Property labels
+    energy_loss_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Energy Loss: 0.00 dB</p></font>")
+    disp_props.append(energy_loss_wdg)
+    prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+    disp_props.insert(0, prop_title)
+    controls_box.append(wdg.VBox(disp_props))       
         
     # Wave control widgets
     wave_controls = []
@@ -873,31 +880,32 @@ def delay_steer(
         value=True,
         description='Element #1'
     )
-    show_controls.append(show1_wdg)
     
     show2_wdg = wdg.ToggleButton(
         value=True,
         description='Element #2'
     )
-    show_controls.append(show2_wdg)
     
     show4_wdg = wdg.ToggleButton(
         value=True,
         description='Element #4'
     )
-    show_controls.append(show4_wdg)
     
     show5_wdg = wdg.ToggleButton(
         value=True,
         description='Element #5'
     )
-    show_controls.append(show5_wdg)
+    
+    show_controls = wdg.TwoByTwoLayout(
+        top_left=show1_wdg,
+        bottom_left=show2_wdg,
+        top_right=show4_wdg,
+        bottom_right=show5_wdg
+    )
         
-    show_box = []
-    if show_controls:
-        show_title = [wdg.HTML(value = DISP_BLOCK_LABEL)]
-        show_box = wdg.VBox(show_title + show_controls, layout=BOX_LAYOUT)
-        controls_box.append(show_box)
+    show_title = wdg.HTML(value = DISP_BLOCK_LABEL)
+    show_box = wdg.VBox([show_title, show_controls], layout=BOX_LAYOUT)
+    controls_box.append(show_box)
         
     # Display widgets
     if controls_box:
@@ -984,7 +992,7 @@ def delay_steer(
         # Update relative energy
         e0 = (num_elem**2/2)*num_cycle/freq/1E6
         rel_e = dx*np.sum(np.abs(total_y)**2)/e0
-        rel_energy.set_text(f"Energy Loss: {rd.to_db(rel_e):.2f} dB")
+        energy_loss_wdg.value = f"<font color=\"Black\"><p>Energy Loss: {rd.to_db(rel_e):.2f} dB</p></font>"
         
     # Reset
     def reset_delays(btn):
@@ -3317,9 +3325,6 @@ def phase_steer(
     total_ax.set_xlim(xlim)
     total_ax.set_ylim([-5, 5])
     
-    # Timestamp
-    rel_energy = fig.text(0.82, 0.9, "Energy Loss: ---", size=12.0)
-    
     # Number of elements
     num_elem = 5
     
@@ -3358,6 +3363,16 @@ def phase_steer(
         
     # Control widgets
     controls_box = []
+    
+    # Properties
+    disp_props = []
+        
+     # Property labels
+    energy_loss_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Energy Loss: 0.00 dB</p></font>")
+    disp_props.append(energy_loss_wdg)
+    prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+    disp_props.insert(0, prop_title)
+    controls_box.append(wdg.VBox(disp_props))
         
     # Wave control widgets
     wave_controls = []
@@ -3482,35 +3497,42 @@ def phase_steer(
         value=True,
         description='Element #1'
     )
-    show_controls.append(show1_wdg)
     
     show2_wdg = wdg.ToggleButton(
         value=True,
         description='Element #2'
     )
-    show_controls.append(show2_wdg)
     
     show4_wdg = wdg.ToggleButton(
         value=True,
         description='Element #4'
     )
-    show_controls.append(show4_wdg)
     
     show5_wdg = wdg.ToggleButton(
         value=True,
         description='Element #5'
     )
-    show_controls.append(show5_wdg)
         
-    show_box = []
-    if show_controls:
-        show_title = [wdg.HTML(value = DISP_BLOCK_LABEL)]
-        show_box = wdg.VBox(show_title + show_controls, layout=BOX_LAYOUT)
-        controls_box.append(show_box)
+    show_controls = wdg.TwoByTwoLayout(
+        top_left=show1_wdg,
+        bottom_left=show2_wdg,
+        top_right=show4_wdg,
+        bottom_right=show5_wdg
+    )
+        
+    show_title = wdg.HTML(value = DISP_BLOCK_LABEL)
+    show_box = wdg.VBox([show_title, show_controls], layout=BOX_LAYOUT)
+    controls_box.append(show_box)
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '710px', '350px']
+            )
+        )
 
     # Plot
     def plot(
@@ -3587,7 +3609,7 @@ def phase_steer(
         # Update relative energy
         e0 = (num_elem**2/2)*num_cycle/freq/1E6
         rel_e = dx*np.sum(np.abs(total_y)**2)/e0
-        rel_energy.set_text(f"Energy Loss: {rd.to_db(rel_e):.2f} dB")
+        energy_loss_wdg.value = f"<font color=\"Black\"><p>Energy Loss: {rd.to_db(rel_e):.2f} dB</p></font>"
         
     # Reset
     def reset_phases(btn):
@@ -3648,8 +3670,7 @@ def pol(
     
     # Initialize plot
     fig1, ax1 = plt.new_plot(
-        axes_width=0.55, 
-        axes_height=0.90, 
+        layout='sidebar', 
         projection='3d'
     )
     ax1.set_xlabel(RANGE_M_LABEL)
@@ -3778,7 +3799,13 @@ def pol(
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+            )
+        )
 
     # Plot
     def animate(frame, vh, imag, freq):
@@ -6586,7 +6613,7 @@ def sine_pulse(
     # Properties
     disp_props = []
     
-    # Timestamp
+    # Property labels
     if show_peak:
         peak = amp**2/2
         peak_power_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Peak Power: {peak/1E3:.2f} kW</p></font>")
