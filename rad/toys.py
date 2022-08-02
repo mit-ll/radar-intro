@@ -1769,7 +1769,7 @@ def dish_pat(
         dx = xlim[1] - xlim[0]
         dy = ylim[1] - ylim[0]
         beamw0 = rd.dish_beamw(1.0, 1E9)
-        text1 = ax1.text(xlim[1] + 0.025*dx, ylim[1] - 0.07*dy, f"Beamwidth: {beamw0:.2f} deg", size=12.0)
+        text1 = ax1.text(xlim[1] - 0.47*dx, ylim[1] - 0.06*dy, f"Beamwidth: {beamw0:.2f} deg", size=12.0)
     
     # Initialize angle vector
     theta = np.linspace(thetalim[0], thetalim[1], num_samp)
@@ -5796,7 +5796,7 @@ def rect_pat(
     """
 
     # Initialize plot
-    fig1, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel('Horizontal (deg)')
     ax1.set_ylabel('Vertical (deg)')
     ax1.set_xlim(xlim)
@@ -5824,8 +5824,8 @@ def rect_pat(
         dx = xlim[1] - xlim[0]
         dy = ylim[1] - ylim[0]
         h_beamw0, v_beamw0 = rd.rect_beamw(height, width, freq*1E6)
-        text1 = ax1.text(xlim[1] + 0.025*dx, ylim[1] - 0.07*dy, f"Horiz. Beamwidth: {h_beamw0:.2f} deg", size=12.0)
-        text2 = ax1.text(xlim[1] + 0.025*dx, ylim[1] - 0.14*dy, f"Vert. Beamwidth: {v_beamw0:.2f} deg", size=12.0)
+        text1 = ax1.text(xlim[1] - 0.57*dx, ylim[1] - 0.06*dy, f"Horiz. Beamwidth: {h_beamw0:.2f} deg", size=12.0, color='w')
+        text2 = ax1.text(xlim[1] - 0.57*dx, ylim[1] - 0.14*dy, f"Vert. Beamwidth: {v_beamw0:.2f} deg", size=12.0, color='w')
     
     # Control widgets
     controls_box = []
@@ -5886,7 +5886,13 @@ def rect_pat(
        
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+            )
+        )
        
     # Plot
     def plot(freq, height, width):

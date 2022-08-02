@@ -180,7 +180,7 @@ def robby(
     wdg_layout = wdg.Layout(grid_template_columns="repeat(3, 350px)")    
 
     # Build axes
-    fig, ax_scan, fig_pulse, ax_pulse = pl.new_rad_plot()
+    fig_scan, ax_scan, fig_pulse, ax_pulse = pl.new_rad_plot()
     
     # Pulse axes
     ax_pulse.set_ylabel('SNR (dB)')
@@ -190,7 +190,7 @@ def robby(
     ax_scan.set_yticklabels([])
     
     # Live text
-    text1 = fig.text(0, 0, "Time: ---", 
+    text1 = fig_scan.text(0, 0, "Time: ---", 
         family='monospace', 
         size=9,
         weight='normal'
@@ -394,7 +394,7 @@ def robby(
         style=style, 
         readout_format='.2f'
     )
-    oper_controls.append(az_pulse_wdg)
+    # oper_controls.append(az_pulse_wdg)
     
     oper_controls_box = []
     if oper_controls:
@@ -474,9 +474,22 @@ def robby(
             else:
                 price_wdg.value = f"<font color=\"Red\"><h2>Price: ${price0:.2f}</h2></font>"
                 
-            display(wdg.VBox([price_wdg, controls_wdg]))
-        else:
-            display(controls_wdg)
+            controls_box.insert(0, price_wdg)
+            
+        display(
+            wdg.VBox([
+                wdg.AppLayout(
+                center=fig_scan.canvas, 
+                right_sidebar=wdg.VBox(controls_box),
+                pane_widths=[0, '810px', '350px']
+                ),
+                wdg.AppLayout(
+                center=fig_pulse.canvas, 
+                right_sidebar=az_pulse_wdg,
+                pane_widths=[0, '810px', '350px']
+                ),
+            ])      
+        )
        
     # Initialize frame
     frame_wdg = wdg.IntSlider(

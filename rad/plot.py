@@ -454,6 +454,8 @@ def new_rad_plot(*argv, **kwarg):
         }
     rc(('font'), **font_prop)
 
+    pyp.ioff()
+    
     dpi = 100
     fig_scan = pyp.figure(
         figsize = (9*90/dpi, 7*90/dpi), 
@@ -469,7 +471,7 @@ def new_rad_plot(*argv, **kwarg):
         projection='polar'
         )
     fig_pulse = pyp.figure(
-        figsize = (8*110/dpi, 2*110/dpi), 
+        figsize = (9*90/dpi, 2*110/dpi), 
         dpi = dpi,
         edgecolor = edge, 
         facecolor = face
@@ -482,6 +484,8 @@ def new_rad_plot(*argv, **kwarg):
         projection='rectilinear'
         )
 
+    pyp.ion()
+    
     # Put zero azimuth at top
     ax_scan.set_theta_zero_location("N")
     ax_scan.set_theta_direction(-1)
