@@ -384,23 +384,25 @@ def robby(
     if reset:
         reset_wdg = wdg.Button(description="Reset")
         oper_controls.append(reset_wdg)
-    
-    az_pulse_wdg = wdg.FloatSlider(
-        min=0, 
-        max=360, 
-        step=360/(num_az - 1), 
-        value=0, 
-        description="Pulse Azimuth (deg)", 
-        style=style, 
-        readout_format='.2f'
-    )
-    # oper_controls.append(az_pulse_wdg)
-    
+
     oper_controls_box = []
     if oper_controls:
         oper_controls_title = [wdg.HTML(value = f"<b><font color='black'>Operation</b>")]
         oper_controls_box = wdg.VBox(oper_controls_title + oper_controls, layout=box_layout)
         controls_box.append(oper_controls_box)
+    
+    # Pulse display slider
+    az_pulse_wdg = wdg.FloatSlider(
+        min=0, 
+        max=360, 
+        step=360/(num_az - 1), 
+        value=0, 
+        description="Azimuth (deg)", 
+        style=style, 
+        readout_format='.2f'
+    )
+    az_pulse_title = wdg.HTML(value = f"<b><font color='black'>Pulse Display</b>")
+    pulse_disp_box = [az_pulse_title, az_pulse_wdg]
     
     # Test targets
     target_controls = []
@@ -485,7 +487,7 @@ def robby(
                 ),
                 wdg.AppLayout(
                 center=fig_pulse.canvas, 
-                right_sidebar=az_pulse_wdg,
+                right_sidebar=wdg.VBox(pulse_disp_box),
                 pane_widths=[0, '810px', '350px']
                 ),
             ])      
