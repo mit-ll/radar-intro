@@ -212,19 +212,20 @@ def new_plot2(**kwarg):
 
     # Grid
     gs = {
-            "left": 0.2,
+            "left": 0.15,
             "bottom": 0.15,
-            "right": 0.8,
+            "right": 0.85,
             "top": 0.95,
             "hspace": 0.3
          }
     
+    pyp.ioff()
     dpi = 100
     fig, axs = pyp.subplots(
         nrows=2,
         ncols=1,
         gridspec_kw=gs,
-        figsize = (1050/dpi, 500/dpi), 
+        figsize = (700/dpi, 500/dpi), 
         dpi = dpi,
         edgecolor = edge, 
         facecolor = face

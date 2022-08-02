@@ -63,6 +63,7 @@ NOISE_TEMP_LABEL = 'Noise Temperature (°K)'
 NORM_ENERGY_DBJ_LABEL = 'Normalized Energy (dBJ)'
 NORTH_M_LABEL = 'North (m)'
 OBS_TIME_MS_LABEL = 'Observation Time (ms)'
+PROP_BLOCK_LABEL = f"<b><font color='black'>Properties</b>"
 RADAR_BLOCK_LABEL = f"<b><font color='black'>Radar</b>"
 RANGE_M_LABEL = 'Range (m)'
 RANGE_KM_LABEL = 'Range (km)'
@@ -6572,15 +6573,28 @@ def sine_pulse(
     power = (np.abs(yii)**2)/2
     power_line = power_ax.plot(xvec, power/1E3, linewidth=2.0, color='red')[0]
     
+    # Control widgets
+    controls_box = []
+    
+    # Properties
+    disp_props = []
+    
     # Timestamp
     if show_peak:
         peak = amp**2/2
-        peak_power = fig.text(0.82, 0.9, f"Peak Power: {peak/1E3:.2f} kW", size=12)
+        peak_power_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Peak Power: {peak/1E3:.2f} kW</p></font>")
+        disp_props.append(peak_power_wdg)
     if show_pri:
-        pri_text = fig.text(0.82, 0.85, f"PRI: {pri*1E6:.2f} µs", size=12)
+        pri_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>PRI: {pri*1E6:.2f} µs</p></font>")
+        disp_props.append(pri_wdg)
     if show_duty:
         duty_cycle = np.minimum(pulsewidth/1E6/pri, 1.0)
-        duty_text = fig.text(0.82, 0.8, f"Duty Cycle: {duty_cycle:.2f}", size=12)
+        duty_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Duty Cycle: {duty_cycle:.2f}</p></font>")
+        disp_props.append(duty_wdg)
+    if disp_props:
+        prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+        disp_props.insert(0, prop_title)
+        controls_box.append(wdg.VBox(disp_props))
         
     # Peak power
     peak_line = power_ax.plot(
@@ -6590,9 +6604,6 @@ def sine_pulse(
         color='black', 
         linestyle='dashed'
         )[0]
-        
-    # Control widgets
-    controls_box = []
         
     # Wave control widgets
     wave_controls = []
@@ -6665,7 +6676,13 @@ def sine_pulse(
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '700px', '350px']
+            )
+        )
 
     # Plot
     def plot(energy, freq, prf, pulsewidth):
@@ -6687,16 +6704,16 @@ def sine_pulse(
         
         # Peak power
         if show_peak:
-            peak_power.set_text(f"Peak Power: {peak/1E3:.2f} kW")
+            peak_power_wdg.value = f"<font color=\"Black\"><p>Peak Power: {peak/1E3:.2f} kW</p></font>"
             
         # Peak power
         if show_pri:
-            pri_text.set_text(f"PRI: {pri*1E6:.2f} µs")
+            pri_wdg.value = f"<font color=\"Black\"><p>PRI: {pri*1E6:.2f} µs</p></font>"
             
         # Duty cycle
         if show_duty:
             duty_cycle = np.minimum(pulsewidth/1E6/pri, 1.0)
-            duty_text.set_text(f"Duty Cycle: {duty_cycle:.2f}")
+            duty_wdg.value = f"<font color=\"Black\"><p>Duty Cycle: {duty_cycle:.2f}</p></font>"
             
         # Peak power line
         peak_line.set_ydata([amp**2/2/1E3, amp**2/2/1E3])
