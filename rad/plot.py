@@ -212,9 +212,9 @@ def new_plot2(**kwarg):
 
     # Grid
     gs = {
-            "left": 0.15,
+            "left": 0.17,
             "bottom": 0.15,
-            "right": 0.85,
+            "right": 0.92,
             "top": 0.95,
             "hspace": 0.3
          }

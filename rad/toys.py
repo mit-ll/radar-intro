@@ -903,8 +903,9 @@ def delay_steer(
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
-            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT)
+            center=fig.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '710px', '350px']
             )
         )
 
@@ -2985,7 +2986,7 @@ def lfm(
     xlim = [0, max_pulsewidth]
     
     # Initialize plot
-    fig, ax = plt.new_plot()
+    fig, ax = plt.new_plot(layout='sidebar')
     ax.set_xlabel(TIME_US_LABEL)
     ax.set_ylabel(WAVEFORM_V_LABEL)
     ax.set_xlim(xlim)
@@ -3076,7 +3077,13 @@ def lfm(
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+            )
+        )
 
     # Plot
     def plot(energy, start_freq, stop_freq, pulsewidth):
