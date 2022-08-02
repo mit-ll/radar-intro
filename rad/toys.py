@@ -3250,7 +3250,13 @@ def matched_filter(
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '700px', '350px']
+            )
+        )
 
     # Plot
     def plot(delay, start_freq, stop_freq, pulsewidth):
@@ -5085,7 +5091,7 @@ def range_res(
     ylim = [-20, 5]
     
     # Initialize plot
-    fig, ax = plt.new_plot()
+    fig, ax = plt.new_plot(layout='sidebar')
     ax.set_xlabel(DELAY_US_LABEL)
     ax.set_ylabel('Filter Output (dB)')
     ax.set_xlim(xlim)
@@ -5189,7 +5195,13 @@ def range_res(
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+            )
+        )
 
     # Plot
     def plot(r, start_freq, stop_freq, pulsewidth):
