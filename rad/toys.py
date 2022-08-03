@@ -442,7 +442,7 @@ def cross_range(
     """
 
     # Initialize plot
-    fig1, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel(CROSS_RANGE_M_LABEL)
     ax1.set_ylabel(NORM_ENERGY_DBJ_LABEL)
     ax1.set_xlim(xlim)
@@ -523,7 +523,8 @@ def cross_range(
         display(
             wdg.AppLayout(
             center=fig1.canvas, 
-            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT)
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
             )
         )
        
@@ -575,7 +576,7 @@ def cw(
     xlim = [min_freq, max_freq]
 
     # Initialize plot
-    fig1, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel(REL_FREQ_HZ_LABEL)
     ax1.set_ylabel(NORM_ENERGY_DBJ_LABEL)
     ax1.set_xlim(xlim)
@@ -654,7 +655,15 @@ def cw(
         display(
             wdg.AppLayout(
             center=fig1.canvas, 
-            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT)
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+            )
+        )
+    else:
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            pane_widths=[0, '600px', 0]
             )
         )
        
@@ -2358,7 +2367,7 @@ def ekf(
         return x, P
             
     # Initialize plot
-    _, axs = plt.new_plot2()
+    fig, axs = plt.new_plot2()
     ax_east = axs[0]
     ax_north = axs[1]
     ax_north.set_xlabel(TIME_S_LABEL)
@@ -2551,7 +2560,13 @@ def ekf(
        
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '700px', '350px']
+            )
+        )
         
     def new_run(btn):
         
@@ -2786,7 +2801,7 @@ def gnn(
     max_det = 5
     
     # Initialize plot
-    _, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel(EAST_M_LABEL)
     ax1.set_ylabel(NORTH_M_LABEL)
     ax1.set_xlim(xlim)
@@ -2881,7 +2896,13 @@ def gnn(
     
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+            )
+        )
        
     # Initialize states
     det_x = np.zeros((max_det))
@@ -4107,7 +4128,7 @@ def propagation(
     """
 
     # Initialize plot
-    _, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel(RANGE_M_LABEL)
     ax1.set_ylabel('Altitude (m)')
     ax1.set_xlim(xlim)
@@ -4117,9 +4138,6 @@ def propagation(
     t0 = 0
     t1 = 20
     dt = (t1 - t0)/(num_step - 1)
-
-    # Timestamp 
-    timestamp = ax1.text(xlim[1] + 5, ylim[1] - 12, f"Time: {t0:.2f} s", size=12.0)
    
     # Target position
     targ_pt = ax1.scatter(x, y, 50.0, color='red')
@@ -4127,6 +4145,16 @@ def propagation(
     # Control widgets
     controls_box = []
        
+    # Properties
+    disp_props = []
+        
+    # Property labels
+    time_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Time: {t0:.2f} s</p></font>")
+    prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+    disp_props.append(prop_title)
+    disp_props.append(time_wdg)
+    controls_box.append(wdg.VBox(disp_props))
+        
     # Subcontrol widgets
     sub_controls1 = []
    
@@ -4241,7 +4269,13 @@ def propagation(
 
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+            )
+        )
        
     # Plot
     def animate(frame, dx, dy, model, x, y):
@@ -4250,7 +4284,7 @@ def propagation(
         t = t0 + (frame - 1)*dt
 
         # Update text
-        timestamp.set_text(f"Time: {t:.2f} s")
+        time_wdg.value = f"<font color=\"Black\"><p>Time: {t:.2f} s</p></font>"
 
         # State
         if model_wdg.value == 'Gravity':
@@ -5719,7 +5753,7 @@ def rdi(
     ylim = [min_range, max_range]
 
     # Initialize plot
-    fig1, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel(REL_FREQ_HZ_LABEL)
     ax1.set_ylabel('Relative Range (m)')
     ax1.set_xlim(xlim)
@@ -5851,7 +5885,13 @@ def rdi(
     
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+            )
+        )
        
     # Plot
     def plot(r, dr, bandw, freq, num_pulse, prf):
