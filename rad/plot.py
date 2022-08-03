@@ -146,7 +146,8 @@ def new_plot(*argv, **kwarg):
     rc('figure', max_open_warning=0)
 
     # Avoid double axes
-    pyp.ioff()
+    if not (layout == 'center'):
+        pyp.ioff()
     
     # Layout
     if (layout == 'center'):
