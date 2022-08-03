@@ -150,9 +150,6 @@ def array(
     t1 = 2*max_range/propvel
     dt = (t1 - t0)/(num_step - 1)
 
-    # Timestamp 
-    timestamp = ax1.text(xlim[1] - 0.33*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E3:.2f} ms", size=12.0)
-
     # Element markers
     x_elem = []
     elems = []
@@ -189,6 +186,16 @@ def array(
         
     # Control widgets
     controls_box = []
+        
+    # Properties
+    disp_props = []
+        
+    # Property labels
+    time_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Time: {t0*1E3:.2f} ms</p></font>")
+    prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+    disp_props.append(prop_title)
+    disp_props.append(time_wdg)
+    controls_box.append(wdg.VBox(disp_props))  
         
     # Sensor control widgets
     sensor_controls = []
@@ -317,7 +324,7 @@ def array(
         t = t0 + (frame - 1)*dt
 
         # Update timestamp
-        timestamp.set_text(f"Time: {t*1000:.2f} ms")
+        time_wdg.value = f"<font color=\"Black\"><p>Time: {t*1E3:.2f} ms</p></font>"
         
         # Update target
         if not tgt_hide:
@@ -1933,9 +1940,6 @@ def doppler(
     t1 = 2*max_range/propvel
     dt = (t1 - t0)/(num_step - 1)
 
-    # Timestamp 
-    timestamp = ax1.text(xlim[1] - 0.33*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E3:.2f} ms", size=12.0)
-
     # Sensor marker
     cs = ptch.Circle((0, 0), 5, color='blue')
     ax1.add_patch(cs)
@@ -1981,6 +1985,16 @@ def doppler(
         
     # Control widgets
     controls_box = []
+        
+    # Properties
+    disp_props = []
+        
+    # Property labels
+    time_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Time: {t0*1E3:.2f} ms</p></font>")
+    prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+    disp_props.append(prop_title)
+    disp_props.append(time_wdg)
+    controls_box.append(wdg.VBox(disp_props))  
         
     # Sensor control widgets
     sensor_controls = []
@@ -2097,7 +2111,7 @@ def doppler(
         t = t0 + (frame - 1)*dt
 
         # Update timestamp
-        timestamp.set_text(f"Time: {t*1E3:.2f} ms")
+        time_wdg.value = f"<font color=\"Black\"><p>Time: {t*1E3:.2f} ms</p></font>"
         
         # Target range, azimuth
         tgt_r = r + t*dr
@@ -3870,7 +3884,7 @@ def prop_loss(
     ylim = [-100, 100]
     ):
     """
-    Radar polarization demonstration.
+    Propagation loss demonstration.
     
     Inputs:
     - freq [float]: Transmit frequency (Hz); default 100 Hz
@@ -3907,9 +3921,6 @@ def prop_loss(
     t0 = 0
     t1 = 2*max_range/propvel
     dt = (t1 - t0)/(num_step - 1)
-    
-    # Timestamp 
-    timestamp = ax1.text(xlim[1] - 0.33*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E3:.2f} ms", size=12.0)
 
     # Sensor marker
     cs = ptch.Circle((0, 0), 5, color='blue')
@@ -3928,6 +3939,16 @@ def prop_loss(
 
     # Control widgets
     controls_box = []
+        
+     # Properties
+    disp_props = []
+    
+    # Property labels
+    time_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Time: {t0*1E3:.2f} ms</p></font>")
+    prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+    disp_props.append(prop_title)
+    disp_props.append(time_wdg)
+    controls_box.append(wdg.VBox(disp_props))       
         
     # Sensor control widgets
     sensor_controls = []
@@ -3999,7 +4020,7 @@ def prop_loss(
         t = t0 + (frame - 1)*dt
 
         # Update timestamp
-        timestamp.set_text(f"Time: {t*1000:.2f} ms")
+        time_wdg.value=f"<font color=\"Black\"><p>Time: {t*1E3:.2f} ms</p></font>"
         
         # Update wavefront
         for ii in range(num_cycle):
@@ -4294,6 +4315,16 @@ def radar_range_det(
     # Control widgets
     controls_box = []
        
+    # Properties
+    disp_props = []           
+        
+    # Property labels
+    snr_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>SNR: --- </p></font>")
+    prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+    disp_props.append(prop_title)
+    disp_props.append(snr_wdg)
+    controls_box.append(wdg.VBox(disp_props)) 
+        
     # Radar
     radar_controls = []
     
@@ -4428,19 +4459,17 @@ def radar_range_det(
     y_noise = np.sqrt(noise_energy)*np.random.randn(num_samp)
     y_sig = np.zeros((num_samp))
     y_sig[r_bin] = np.sqrt(signal_energy)
-    y = y_sig + y_noise
+    y = y_sig + y_noise       
     
     recv_line = ax1.plot(range_bin, 2*rd.to_db(y), color='red')[0]
     
-    if highlight:
-        echo_line = ax1.plot([r, r], [ylim[0], 2*rd.to_db(y[r_bin])], color='black', linewidth=3.0)[0]
-
-    # Live text
-    dx = xlim[1] - xlim[0]
-    dy = ylim[1] - ylim[0]
+    # SNR
     snr0 = signal_energy/noise_energy
     snr0_db = 10*np.log10(snr0)
-    text1 = ax1.text(xlim[1] - 0.31*dx, ylim[1] - 0.06*dy, f"SNR: {snr0_db:.2f} dB", size=12.0)
+    snr_wdg.value = f"<font color=\"Black\"><p>SNR: {snr0_db:.2f} dB</p></font>"
+    
+    if highlight:
+        echo_line = ax1.plot([r, r], [ylim[0], 2*rd.to_db(y[r_bin])], color='black', linewidth=3.0)[0]
     
     # Plot
     def plot(freq, energy, radius, noise_temp, rcs, r):
@@ -4457,9 +4486,9 @@ def radar_range_det(
         if highlight:
             echo_line.set_data([r, r], [ylim[0], 2*rd.to_db(y[r_bin])])
         
-        snr0 = signal_energy/noise_energy
-        snr0_db = 10*np.log10(snr0)
-        text1.set_text("SNR: {val_db:.2f} dB".format(val_db=snr0_db))
+        snr = signal_energy/noise_energy
+        snr_db = 10*np.log10(snr)
+        snr_wdg.value = f"<font color=\"Black\"><p>SNR: {snr_db:.2f} dB</p></font>"
    
     # Add interaction
     wdg.interactive(
@@ -4943,9 +4972,6 @@ def radar_wave(
     t0 = 0
     t1 = xlim[1]/propvel
     dt = (t1 - t0)/(num_step - 1)
-    
-    # Timestamp 
-    timestamp = ax1.text(xlim[1] - 0.33*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E9:.2f} ns", size=12.0)
 
     # Wave value marker
     wave_val = ptch.Circle((0, 0), 0.1, color='pink')
@@ -4957,6 +4983,16 @@ def radar_wave(
         
     # Control widgets
     controls_box = []
+        
+    # Properties
+    disp_props = []
+        
+    # Property labels
+    time_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Time: {t0*1E9:.2f} ns</p></font>")
+    prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+    disp_props.append(prop_title)
+    disp_props.append(time_wdg)
+    controls_box.append(wdg.VBox(disp_props))  
         
     # Wave control widgets
     wave_controls = []
@@ -5030,7 +5066,7 @@ def radar_wave(
         t = t0 + (frame - 1)*dt
 
         # Update timestamp
-        timestamp.set_text(f"Time: {t*1E9:.2f} ns")
+        time_wdg.value = f"<font color=\"Black\"><p>Time: {t*1E9:.2f} ns</p></font>"
  
         wave_amp = np.cos(2*np.pi*(1E6*freq/propvel)*(xvec - propvel*t))
         wave_amp[xvec > propvel*t] = 0.0
@@ -5301,9 +5337,6 @@ def ranging(
     dt = (t1 - t0)/(num_step - 1)
     tvec = np.arange(t0, t1, dt)   
     
-    # Timestamp
-    timestamp = ax1.text(xlim[1] - 0.33*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E3:.2f} ms", size=12.0)
-    
     # Sensor marker
     cs = ptch.Circle((0, 0), 5, color='blue')
     ax1.add_patch(cs)
@@ -5336,6 +5369,16 @@ def ranging(
         
     # Control widgets
     controls_box = []
+        
+    # Properties
+    disp_props = []
+        
+    # Property labels
+    time_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Time: {t0*1E3:.2f} ms</p></font>")
+    prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+    disp_props.append(prop_title)
+    disp_props.append(time_wdg)
+    controls_box.append(wdg.VBox(disp_props))        
         
     # Sensor control widgets
     sensor_controls = []
@@ -5510,7 +5553,7 @@ def ranging(
         t = t0 + (frame - 1)*dt
 
         # Update timestamp
-        timestamp.set_text("Time: {ti:.2f} ms".format(ti=t*1000))
+        time_wdg.value=f"<font color=\"Black\"><p>Time: {t*1E3:.2f} ms</p></font>"
         
         # Target range, azimuth
         tgt_r = np.sqrt(tgt_x**2 + tgt_y**2)
@@ -6232,9 +6275,6 @@ def sine_prop(
         time_label = 'ns'
         time_scalar = 1E9
 
-    # Timestamp
-    timestamp = ax1.text(xlim[1] - 0.31*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*time_scalar:.2f} {time_label}", size=12.0)
-
     # Wave
     xvec = np.linspace(xlim[0], xlim[1], num_step)
     y_wave = np.zeros(xvec.shape)
@@ -6248,6 +6288,16 @@ def sine_prop(
         
     # Control widgets
     controls_box = []
+        
+    # Properties
+    disp_props = []
+        
+    # Property labels
+    time_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Time: {t0*time_scalar:.2f} {time_label}</p></font>")
+    prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+    disp_props.append(prop_title)
+    disp_props.append(time_wdg)
+    controls_box.append(wdg.VBox(disp_props))            
         
     # Wave control widgets
     wave_controls = []
@@ -6334,7 +6384,7 @@ def sine_prop(
         t = t0 + (frame - 1)*dt
 
         # Update timestamp
-        timestamp.set_text(f"Time: {t*time_scalar:.2f} {time_label}")
+        time_wdg.value = f"<font color=\"Black\"><p>Time: {t*time_scalar:.2f} {time_label}</p></font>"
  
         # Update truth
         a0 = np.sqrt(cnst.eta*power)
@@ -6415,9 +6465,6 @@ def sine_prop_generic(
     t1 = xlim[1]/propvel
     dt = (t1 - t0)/(num_step - 1)
     
-    # Timestamp
-    timestamp = ax1.text(xlim[1] - 0.31*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E3:.2f} ms", size=12.0)
-    
     # Wave
     xvec = np.linspace(xlim[0], xlim[1], num_step)
     y_wave = np.zeros(xvec.shape)
@@ -6431,6 +6478,16 @@ def sine_prop_generic(
         
     # Control widgets
     controls_box = []
+        
+    # Properties
+    disp_props = []
+        
+    # Property labels
+    time_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Time: {t0*1E3:.2f} ms</p></font>")
+    prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+    disp_props.append(prop_title)
+    disp_props.append(time_wdg)
+    controls_box.append(wdg.VBox(disp_props))        
         
     # Wave control widgets
     wave_controls = []
@@ -6518,11 +6575,11 @@ def sine_prop_generic(
         
         # Update timestamp
         if (time_scale == -1):
-            timestamp.set_text("Time: {ti:.2f} ms".format(ti=t*1E3))
+            time_wdg.value=f"<font color=\"Black\"><p>Time: {t*1E3:.2f} ms</p></font>"
         elif (time_scale == -2):
-            timestamp.set_text("Time: {ti:.2f} µs".format(ti=t*1E6))
+            time_wdg.value=f"<font color=\"Black\"><p>Time: {t*1E6:.2f} µs</p></font>"
         elif (time_scale == -3):
-            timestamp.set_text("Time: {ti:.2f} ns".format(ti=t*1E9))
+            time_wdg.value=f"<font color=\"Black\"><p>Time: {t*1E9:.2f} ns</p></font>"
  
         # Update truth
         a0 = np.sqrt(cnst.eta*power)
@@ -6810,14 +6867,22 @@ def snr(
     ax1.set_xlim(xlim)
     ax1.set_ylim(ylim)
    
-    # Live text
-    if show_snr:
-        snr0_db = signal_energy - noise_energy
-        text1 = ax1.text(xlim[1] - 0.33*x_span, ylim[1] - 0.06*y_span, f"SNR: {snr0_db:.2f} dB", size=12.0)
-
     # Control widgets
     controls_box = []
        
+    # Properties
+    disp_props = []
+        
+    # Property labels
+    if show_snr:
+        snr0_db = signal_energy - noise_energy
+        snr_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>SNR: {snr0_db:.2f} dB</p></font>")
+        prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+        disp_props.append(prop_title)
+        disp_props.append(snr_wdg)
+    if disp_props:
+        controls_box.append(wdg.VBox(disp_props))  
+        
     # Subcontrol widgets
     sub_controls1 = []
    
@@ -6882,8 +6947,8 @@ def snr(
     # Plot
     def plot(noise_energy, signal_energy):
         if show_snr:
-            snr0_db = signal_energy - noise_energy
-            text1.set_text("SNR: {val_db:.2f} dB".format(val_db=snr0_db))
+            snr_db = signal_energy - noise_energy
+            snr_wdg.value = f"<font color=\"Black\"><p>SNR: {snr_db:.2f} dB</p></font>"
         noise_line.set_ydata(2*rd.to_db(np.sqrt(rd.from_db(noise_energy))*np.random.randn(num_samp)))
         echo_line.set_ydata([ylim[0], signal_energy])
    
@@ -7096,9 +7161,6 @@ def wave(
     t0 = 0
     t1 = 2/500
     dt = (t1 - t0)/(num_step - 1)
-    
-    # Timestamp
-    timestamp = ax1.text(xlim[1] - 0.31*x_span, ylim[1] - 0.06*y_span, f"Time: {t0*1E3:.2f} ms", size=12.0)
 
     # Wave value marker
     wave_val = ptch.Circle((0, 0), 0.1, color='pink')
@@ -7110,6 +7172,16 @@ def wave(
         
     # Control widgets
     controls_box = []
+        
+    # Properties
+    disp_props = []
+        
+    # Property labels
+    time_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Time: {t0*1E3:.2f} ms</p></font>")
+    prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+    disp_props.append(prop_title)
+    disp_props.append(time_wdg)
+    controls_box.append(wdg.VBox(disp_props))          
         
     # Wave control widgets
     wave_controls = []
@@ -7194,7 +7266,7 @@ def wave(
         t = t0 + (frame - 1)*dt
 
         # Update timestamp
-        timestamp.set_text("Time: {ti:.2f} ms".format(ti=t*1000))
+        time_wdg.value=f"<font color=\"Black\"><p>Time: {t*1E3:.2f} ms</p></font>"
  
         wave_amp = np.cos(2*np.pi*(freq/propvel)*(xvec - propvel*t))
         wave_amp[xvec > propvel*t] = 0.0
