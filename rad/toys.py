@@ -3748,9 +3748,6 @@ def pol(
     t1 = max_plot_range/propvel
     dt = (t1 - t0)/(num_step - 1)
     
-    # Timestamp
-    timestamp = fig1.text(0.8, 0.8, f"Time: {t0*1E9:.2f} ns", size=12)
-    
     # Wave
     r0 = np.linspace(xlim[0], xlim[1], num_step)
     hdata = np.zeros((3*num_step))
@@ -3768,6 +3765,16 @@ def pol(
         
     # Control widgets
     controls_box = []
+        
+    # Properties
+    disp_props = []
+        
+    # Property labels
+    time_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Time: {t0*1E9:.2f} ns</p></font>")
+    prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+    disp_props.append(prop_title)
+    disp_props.append(time_wdg)
+    controls_box.append(wdg.VBox(disp_props))          
         
     # Wave control widgets
     wave_controls = []
@@ -3871,7 +3878,7 @@ def pol(
         t = t0 + (frame - 1)*dt
 
         # Update timestamp
-        timestamp.set_text(f"Time: {t*1E9:.2f} ns")
+        time_wdg.value = f"<font color=\"Black\"><p>Time: {t*1E9:.2f} ns</p></font>"
  
         # Amplitude
         wave_h = np.cos(2*np.pi*(1E6*freq/propvel)*(r0 - propvel*t))*np.cos(rd.deg2rad(vh))
