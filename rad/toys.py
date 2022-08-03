@@ -1052,14 +1052,10 @@ def detect_game(
     positions = np.zeros((n), dtype='bool')
     
     # Figure/axes
-    fig, ax = plt.new_plot()
+    fig, ax = plt.new_plot(layout='sidebar')
     ax.set_xlabel(DELAY_US_LABEL)
     ax.set_ylabel(SNR_DB_LABEL)
     ax.set_ylim([y_min, y_min + 80])
-    
-    # Accuracy texts
-    pd_text = fig.text(0.72, 0.85, "Prob. of Detection: ---", size=12.0)
-    pfa_text = fig.text(0.72, 0.8, "Prob. of False Alarm: ---", size=12.0)
     
     # Samples
     pulse = ax.plot(time, values, 'k')[0]
@@ -1073,6 +1069,18 @@ def detect_game(
         results.append(ax.plot([time[3*ii], time[3*ii]], [y_min, y_min], color='k', linewidth=4.0)[0])
     
     controls_box = []
+    
+    # Properties
+    disp_props = []
+        
+    # Property labels
+    pd_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Probability of Detection: ---</p></font>")
+    pfa_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Probability of False Alarm: ---</p></font>")
+    prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+    disp_props.append(prop_title)
+    disp_props.append(pd_wdg)
+    disp_props.append(pfa_wdg)
+    controls_box.append(wdg.VBox(disp_props))      
     
     game_controls = []
     
@@ -1125,8 +1133,9 @@ def detect_game(
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
-            footer=wdg.GridBox(controls_box, layout=WDG_LAYOUT)
+            center=fig.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
             )
         )
     
@@ -1223,7 +1232,8 @@ def detect_game(
         
     def move_highlight():
         ix = 1 + guess[0]*3
-        highlight.set_data([time[ix], time[ix]], [y_min, values[ix]])
+        if ix < 3*n:
+            highlight.set_data([time[ix], time[ix]], [y_min, values[ix]])
         
     def result(s):
         
@@ -1242,14 +1252,14 @@ def detect_game(
     def update_text():
         
         if echoes[0] > 0:
-            pd_text.set_text(f"Prob. of Detection: {dets[0]/echoes[0]:.3f}")
+            pd_wdg.value = f"<font color=\"Black\"><p>Probability of Detection: {dets[0]/echoes[0]:.3f}</p></font>"
         else:
-            pd_text.set_text(f"Prob. of Detection: ---")
+            pd_wdg.value = f"<font color=\"Black\"><p>Probability of Detection: ---</p></font>"
         
         if noises[0] > 0:
-            pfa_text.set_text(f"Prob. of False Alarm: {alarms[0]/noises[0]:.3f}")
+            pfa_wdg.value = f"<font color=\"Black\"><p>Probability of False Alarm: {alarms[0]/noises[0]:.3f}</p></font>"
         else:
-            pfa_text.set_text(f"Prob. of False Alarm: ---")
+            pfa_wdg.value = f"<font color=\"Black\"><p>Probability of False Alarm: ---</p></font>"
     
     # Button interactions
     start_btn.on_click(start_game)
@@ -1781,19 +1791,25 @@ def dish_pat(
     ax1.set_xlim(xlim)
     ax1.set_ylim(ylim)
     
-    # Live text
-    if show_beamw:
-        dx = xlim[1] - xlim[0]
-        dy = ylim[1] - ylim[0]
-        beamw0 = rd.dish_beamw(1.0, 1E9)
-        text1 = ax1.text(xlim[1] - 0.47*dx, ylim[1] - 0.06*dy, f"Beamwidth: {beamw0:.2f} deg", size=12.0)
-    
     # Initialize angle vector
     theta = np.linspace(thetalim[0], thetalim[1], num_samp)
     stheta = np.sin(theta)
     
      # Control widgets
     controls_box = []
+        
+    # Properties
+    disp_props = []           
+        
+    # Property labels
+    beamw0 = rd.dish_beamw(1.0, 1E9)
+    if show_beamw:
+        beamw_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Beamwidth: {beamw0:.2f} deg</p></font>")
+        prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+        disp_props.append(prop_title)
+        disp_props.append(beamw_wdg)
+    if disp_props:
+        controls_box.append(wdg.VBox(disp_props)) 
         
     # Wave control widgets
     dish_controls = []
@@ -1856,7 +1872,7 @@ def dish_pat(
         # Beamwidth
         if show_beamw:
             beamw = rd.dish_beamw(r, freq)
-            text1.set_text(f"Beamwidth: {beamw:.2f} deg")
+            beamw_wdg.value = f"<font color=\"Black\"><p>Beamwidth: {beamw:.2f} deg</p></font>"
         
         # Range range equation
         u = (r/wavelen)*stheta
@@ -5908,18 +5924,25 @@ def rect_pat(
     img = 2*rd.to_db(rd.rect_pat(u_mesh, v_mesh))
     pc = ax1.pcolormesh(az_bins, el_bins, img, shading='gouraud', cmap='inferno')
     pc.set_clim(-40, 0)
-
-    # Live text
-    if show_beamw:
-        dx = xlim[1] - xlim[0]
-        dy = ylim[1] - ylim[0]
-        h_beamw0, v_beamw0 = rd.rect_beamw(height, width, freq*1E6)
-        text1 = ax1.text(xlim[1] - 0.57*dx, ylim[1] - 0.06*dy, f"Horiz. Beamwidth: {h_beamw0:.2f} deg", size=12.0, color='w')
-        text2 = ax1.text(xlim[1] - 0.57*dx, ylim[1] - 0.14*dy, f"Vert. Beamwidth: {v_beamw0:.2f} deg", size=12.0, color='w')
     
     # Control widgets
     controls_box = []
        
+    # Properties
+    disp_props = []           
+        
+    # Property labels
+    h_beamw0, v_beamw0 = rd.rect_beamw(height, width, freq*1E6)
+    if show_beamw:
+        hbeamw_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Horizontal Beamwidth: {h_beamw0:.2f} deg</p></font>")
+        vbeamw_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Vertical Beamwidth: {v_beamw0:.2f} deg</p></font>")
+        prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+        disp_props.append(prop_title)
+        disp_props.append(hbeamw_wdg)
+        disp_props.append(vbeamw_wdg)
+    if disp_props:
+        controls_box.append(wdg.VBox(disp_props)) 
+        
     # Subcontrol widgets
     sub_controls1 = []
    
@@ -5987,8 +6010,8 @@ def rect_pat(
     # Plot
     def plot(freq, height, width):
         h_beamw, v_beamw = rd.rect_beamw(height, width, freq*1E6)
-        text1.set_text(f"Horiz. Beamwidth: {h_beamw:.2f} deg")
-        text2.set_text(f"Vert. Beamwidth: {v_beamw:.2f} deg")
+        hbeamw_wdg.value = f"<font color=\"Black\"><p>Horizontal Beamwidth: {h_beamw:.2f} deg</p></font>"
+        vbeamw_wdg.value = f"<font color=\"Black\"><p>Vertical Beamwidth: {v_beamw:.2f} deg</p></font>"
         wlen = rd.wavelen(freq*1E6)
         u_mesh = -(width/wlen)*u_mesh0
         v_mesh = (height/wlen)*v_mesh0
@@ -6033,7 +6056,7 @@ def roc(
         return np.sqrt(2)*special.erfinv(1 - 2*x)
     
     # Initialize plot
-    fig1, ax1 = plt.new_plot()
+    fig1, ax1 = plt.new_plot(layout='sidebar')
     ax1.set_xlabel(r'$P_{FA}$')
     ax1.set_ylabel(r'$P_{D}$')
     ax1.set_xlim(xlim)
@@ -6049,6 +6072,9 @@ def roc(
     
     # Controls box
     controls_box = []
+    
+    # Properties
+    disp_props = []  
     
     # ROC controls
     roc_controls = []
@@ -6074,7 +6100,13 @@ def roc(
        
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))    
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+            )
+        )    
 
     # Plot
     def plot(snr):
@@ -7001,8 +7033,8 @@ def threshold(
         return pd, pfa
     
     def update_text(pd, pfa):
-        pd_text.set_text(f"Prob. of Detection: {pd:.3f}")
-        pfa_text.set_text(f"Prob. of False Alarm: {pfa:.3f}")
+        pd_wdg.value = f"<font color=\"Black\"><p>Probability of Detection: {pd:.3f}</p></font>"
+        pfa_wdg.value = f"<font color=\"Black\"><p>Probability of False Alarm: {pfa:.3f}</p></font>"
     
     # Minimum energy value
     y_min = -40
@@ -7014,7 +7046,7 @@ def threshold(
     positions = np.zeros((n), dtype='bool')
     
     # Figure/axes
-    fig, ax = plt.new_plot()
+    fig, ax = plt.new_plot(layout='sidebar')
     ax.set_xlabel(DELAY_US_LABEL)
     ax.set_ylabel(SNR_DB_LABEL)
     ax.set_ylim([y_min, y_min + 80])
@@ -7035,12 +7067,20 @@ def threshold(
     # Update colors
     pd, pfa = update_results(values, results, positions, thresh)
     
-    # Accuracy texts
-    pd_text = fig.text(0.72, 0.85, f"Prob. of Detection: {pd:.3f}", size=12.0)
-    pfa_text = fig.text(0.72, 0.8, f"Prob. of False Alarm: {pfa:.3f}", size=12.0)
-    
     # Controls box
     controls_box = []
+    
+    # Properties
+    disp_props = []
+        
+    # Property labels
+    pd_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Probability of Detection: ---</p></font>")
+    pfa_wdg = wdg.HTML(value=f"<font color=\"Black\"><p>Probability of False Alarm: ---</p></font>")
+    prop_title = wdg.HTML(value = PROP_BLOCK_LABEL)
+    disp_props.append(prop_title)
+    disp_props.append(pd_wdg)
+    disp_props.append(pfa_wdg)
+    controls_box.append(wdg.VBox(disp_props))
     
     # Data controls
     data_controls = []
@@ -7094,7 +7134,13 @@ def threshold(
         
     # Display widgets
     if controls_box:
-        display(wdg.GridBox(controls_box, layout=WDG_LAYOUT))
+        display(
+            wdg.AppLayout(
+            center=fig.canvas, 
+            right_sidebar=wdg.VBox(controls_box),
+            pane_widths=[0, '600px', '350px']
+            )
+        )
     
     def new_data(btn):
         
