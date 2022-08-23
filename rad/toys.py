@@ -6274,6 +6274,13 @@ def sine(
             pane_widths=[0, '600px', '350px']
             )
         )
+    else:
+        display(
+            wdg.AppLayout(
+            center=fig1.canvas, 
+            pane_widths=[0, '600px', 0]
+            )
+        )
         
     # Plot
     def animate(amp, freq, phase):
