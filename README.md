@@ -31,11 +31,11 @@ The command prompt should now show that you are in your virtual environment, i.e
 
 Next, we will install the necessary prerequisite packages. To do this, we use the Python installation routine `pip` by typing:
 
-    pip install jupyterlab numpy scipy matplotlib ipympl jupyterlab-mathjax3
+    pip install -r requirements.txt
 
 **Note**: If you are behind a proxy server at `<proxy-address>`, you will have to run `pip` using:
 
-    pip install --proxy <proxy-address> jupyterlab numpy scipy matplotlib ipympl jupyterlab-mathjax3
+    pip install --proxy <proxy-address> -r requirements.txt
 
 ### Radar Course
 
@@ -76,11 +76,11 @@ The terminal should now show that you are in your virtual environment, i.e., if 
 
 Next, we will install the necessary prerequisite packages. To do this, we use the Python installation routine `pip` by typing:
 
-    pip install jupyterlab numpy scipy matplotlib ipympl jupyterlab-mathjax3
+    pip install -r requirements.txt
 
 **Note**: If you are behind a proxy server at `<proxy-address>`, you will have to run `pip` using:
 
-    pip install --proxy <proxy-address> jupyterlab numpy scipy matplotlib ipympl jupyterlab-mathjax3
+    pip install --proxy <proxy-address> -r requirements.txt
 
 ### Radar Course
 
@@ -123,11 +123,11 @@ The terminal should now show that you are in your virtual environment, i.e., if 
 
 Next, we will install the necessary prerequisite packages. To do this, we use the Python installation routine `pip` by typing:
 
-    pip install jupyterlab numpy scipy matplotlib ipympl jupyterlab-mathjax3
+    pip install -r requirements.txt
 
 **Note**: If you are behind a proxy server at `<proxy-address>`, you will have to run `pip` using:
 
-    pip install --proxy <proxy-address> jupyterlab numpy scipy matplotlib ipympl jupyterlab-mathjax3
+    pip install --proxy <proxy-address> -r requirements.txt
 
 ### Radar Course
 
@@ -157,7 +157,7 @@ DISTRIBUTION STATEMENT A. Approved for public release. Distribution is unlimited
 
 This material is based upon work supported by the United States Air Force under Air Force Contract No. FA8702-15-D-0001. Any opinions, findings, conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the United States Air Force.
 
-© 2021 Massachusetts Institute of Technology.
+© 2022 Massachusetts Institute of Technology.
 
 The software/firmware is provided to you on an As-Is basis
 
