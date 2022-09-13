@@ -10,6 +10,10 @@ If you would like to keep a working copy of all notebooks and experience the smo
 
 ## Windows
 
+### Download Course
+
+You can download the course as a ZIP file [here](https://github.com/mit-ll/radar-intro/archive/refs/heads/master.zip). After downloading the ZIP archive, extract it to a desired path (referred to later as `<radar-course-path>`).
+
 ### JupyterLab Installation
 
 If you have not, first install Python on your system; you can download the Python installer from [here](https://www.python.org/downloads/).
@@ -29,8 +33,9 @@ The command prompt should now show that you are in your virtual environment, i.e
 
     (test) c:\test>
 
-Next, we will install the necessary prerequisite packages. To do this, we use the Python installation routine `pip` by typing:
+Next, we will install the necessary prerequisite packages. To do this, we move to radar course directory and use the Python installation routine `pip` by typing:
 
+    cd <radar-course-path>
     pip install -r requirements.txt
 
 **Note**: If you are behind a proxy server at `<proxy-address>`, you will have to run `pip` using:
@@ -55,6 +60,10 @@ Lastly, we can start JupyterLab in the current location:
 
 ## macOS
 
+### Download Course
+
+You can download the course as a ZIP file [here](https://github.com/mit-ll/radar-intro/archive/refs/heads/master.zip). After downloading the ZIP archive, extract it to a desired path (referred to later as `<radar-course-path>`).
+
 ### JupyterLab Installation
 
 If you have not, first install Python on your system; you can download the Python installer from [here](https://www.python.org/downloads/).
@@ -74,8 +83,9 @@ The terminal should now show that you are in your virtual environment, i.e., if 
 
     (test) user@machine:~/test$
 
-Next, we will install the necessary prerequisite packages. To do this, we use the Python installation routine `pip` by typing:
+Next, we will install the necessary prerequisite packages. To do this, we move to radar course directory and use the Python installation routine `pip` by typing:
 
+    cd <radar-course-path>
     pip install -r requirements.txt
 
 **Note**: If you are behind a proxy server at `<proxy-address>`, you will have to run `pip` using:
@@ -99,6 +109,10 @@ Lastly, we can start JupyterLab in the current location:
     
 ## Ubuntu
 
+### Download Course
+
+You can download the course as a ZIP file [here](https://github.com/mit-ll/radar-intro/archive/refs/heads/master.zip). After downloading the ZIP archive, extract it to a desired path (referred to later as `<radar-course-path>`).
+
 ### JupyterLab Installation
 
 If you have not, first install Python on your system. This can be done using `apt` by:
@@ -121,8 +135,9 @@ The terminal should now show that you are in your virtual environment, i.e., if 
 
     (test) user@machine:~/test$
 
-Next, we will install the necessary prerequisite packages. To do this, we use the Python installation routine `pip` by typing:
+Next, we will install the necessary prerequisite packages. To do this, we move to radar course directory and use the Python installation routine `pip` by typing:
 
+    cd <radar-course-path>
     pip install -r requirements.txt
 
 **Note**: If you are behind a proxy server at `<proxy-address>`, you will have to run `pip` using:
