@@ -5598,10 +5598,7 @@ def ranging(
             center=fig1.canvas, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
-        ))
-        
-    # Initialize detections
-    det_list = []
+        ))       
     
     # Plot
     def animate(frame, rx_az, rx_beamw, tx_az, tx_beamw, tgt_x, tgt_y):
@@ -5680,13 +5677,11 @@ def ranging(
             
         # Detection list
         if dets_show:
+            det_str = f"Time: {2000*tgt_r/propvel:.2f} ms"
             det_frame = np.argmin(np.abs(tvec - 2*tgt_r/propvel))
-            if (frame == det_frame) and in_tx_beam and in_rx_beam:
-                det_str = "Time: {det_time:.2f} ms".format(det_time=2000*tgt_r/propvel)
-                det_list.append(det_str)
-                dets_wdg.options = det_list
-            elif (frame == 1):
-                det_list.clear()
+            if (frame >= det_frame) and in_tx_beam and in_rx_beam:
+                dets_wdg.options = [det_str]
+            else:
                 dets_wdg.options = []
             
         # Disable controls during play
