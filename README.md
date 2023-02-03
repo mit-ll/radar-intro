@@ -1,3 +1,5 @@
+<p align="center"><img src="logo.png" width="700"></p>
+
 # Introduction to Radar Course
 
 Welcome to the course material for the MIT Lincoln Laboratory *Introduction to Radar* class. The main lectures come in the form of Jupyter notebooks with interactive elements. The easiest way to try out the course is to use the notebooks hosted by [Binder](https://mybinder.org): simply click the launch button below.
