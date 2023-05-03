@@ -307,11 +307,16 @@ def array(
         run_box = wdg.VBox(run_title + run_controls, layout=BOX_LAYOUT)
         controls_box.append(run_box)   
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -518,11 +523,16 @@ def cross_range(
         sub_controls1_box = wdg.VBox(sub_controls1_title + sub_controls1, layout=BOX_LAYOUT)
         controls_box.append(sub_controls1_box)
        
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -650,11 +660,16 @@ def cw(
         sub_controls1_box = wdg.VBox(sub_controls1_title + sub_controls1, layout=BOX_LAYOUT)
         controls_box.append(sub_controls1_box)
        
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -662,7 +677,7 @@ def cw(
     else:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             pane_widths=[0, '600px', 0]
             )
         )
@@ -923,11 +938,16 @@ def delay_steer(
     show_box = wdg.VBox([show_title, show_controls], layout=BOX_LAYOUT)
     controls_box.append(show_box)
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '710px', '350px']
             )
@@ -1138,11 +1158,16 @@ def detect_game(
         det_box = wdg.VBox(det_title + det_controls, layout=BOX_LAYOUT)
         controls_box.append(det_box)
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -1859,11 +1884,16 @@ def dish_pat(
         dish_box = wdg.VBox(dish_title + dish_controls, layout=BOX_LAYOUT)
         controls_box.append(dish_box)  
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -2117,11 +2147,16 @@ def doppler(
         run_box = wdg.VBox(run_title + run_controls, layout=BOX_LAYOUT)
         controls_box.append(run_box)   
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -2558,11 +2593,16 @@ def ekf(
     # Add to controls
     controls_box.append(wdg.VBox(block2))
        
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '700px', '350px']
             )
@@ -2710,11 +2750,16 @@ def friis(
         sub_controls1_box = wdg.VBox(sub_controls1_title + sub_controls1, layout=BOX_LAYOUT)
         controls_box.append(sub_controls1_box)
        
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '700px', '350px']
             )
@@ -2723,10 +2768,9 @@ def friis(
     # Plot
     def plot(freq, power, radius):
         img = rd.to_db(rd.friis(range_mesh_m, power*1E3, gain=rd.dish_gain(radius, freq*1E6), area=area_mesh_lin))
-        for art in ax1.artists:
-            art.remove()
+        for coll in ax1.collections:
+            coll.remove()
         ax1.contourf(range_bin, area_bin, img, np.linspace(-80, 0, 9), cmap='inferno', extend='both')
-        fig1.canvas.draw()
    
     # Add interaction
     wdg.interactive(
@@ -2894,11 +2938,16 @@ def gnn(
         assoc_controls_box = wdg.VBox(assoc_controls_title + assoc_controls, layout=BOX_LAYOUT)
         controls_box.append(assoc_controls_box)
     
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -3134,11 +3183,16 @@ def lfm(
         wave_box = wdg.VBox(wave_title + wave_controls, layout=BOX_LAYOUT)
         controls_box.append(wave_box)
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -3299,11 +3353,16 @@ def matched_filter(
         wave_box = wdg.VBox(wave_title + wave_controls, layout=BOX_LAYOUT)
         controls_box.append(wave_box)
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '700px', '350px']
             )
@@ -3581,11 +3640,16 @@ def phase_steer(
     show_box = wdg.VBox([show_title, show_controls], layout=BOX_LAYOUT)
     controls_box.append(show_box)
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '710px', '350px']
             )
@@ -3861,11 +3925,16 @@ def pol(
         run_box = wdg.VBox(run_title + run_controls, layout=BOX_LAYOUT)
         controls_box.append(run_box)   
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -4049,13 +4118,20 @@ def prop_loss(
         run_box = wdg.VBox(run_title + run_controls, layout=BOX_LAYOUT)
         controls_box.append(run_box)   
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
-        display(wdg.AppLayout(
-            center=fig1.canvas, 
+        display(
+            wdg.AppLayout(
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
-        ))
+            )
+        )
     
     # Plot
     def animate(frame, freq):
@@ -4274,11 +4350,16 @@ def propagation(
         run_box = wdg.VBox(run_title + run_controls, layout=BOX_LAYOUT)
         controls_box.append(run_box)   
 
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -4499,11 +4580,16 @@ def radar_range_det(
         targ_controls_box = wdg.VBox(targ_controls_title + targ_controls, layout=BOX_LAYOUT)
         controls_box.append(targ_controls_box)
        
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -4669,11 +4755,16 @@ def radar_range_energy(
         sub_controls1_box = wdg.VBox(sub_controls1_title + sub_controls1, layout=BOX_LAYOUT)
         controls_box.append(sub_controls1_box)
        
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '700px', '350px']
             )
@@ -4682,10 +4773,9 @@ def radar_range_energy(
     # Plot
     def plot(freq, energy, radius):
         img = rd.to_db(rd.rx_energy(range_mesh_m, energy, freq*1E6, gain=rd.dish_gain(radius, freq*1E6)**2, rcs=rcs_mesh_lin))
-        for art in ax1.artists:
-            art.remove()
+        for coll in ax1.collections:
+            coll.remove()
         ax1.contourf(range_bin, rcs_bin, img, np.linspace(-230, -90, 8), cmap='inferno', extend='both')
-        fig1.canvas.draw()
    
     # Add interaction
     wdg.interactive(
@@ -4806,11 +4896,16 @@ def radar_range_power(
         sub_controls1_box = wdg.VBox(sub_controls1_title + sub_controls1, layout=BOX_LAYOUT)
         controls_box.append(sub_controls1_box)
        
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '700px', '350px']
             )
@@ -4819,10 +4914,9 @@ def radar_range_power(
     # Plot
     def plot(freq, power, radius):
         img = rd.to_db(rd.rx_power(range_mesh_m, power*1E3, freq*1E6, gain=rd.dish_gain(radius, freq*1E6)**2, rcs=rcs_mesh_lin))
-        for art in ax1.artists:
-            art.remove()
+        for coll in ax1.collections:
+            coll.remove()
         ax1.contourf(range_bin, rcs_bin, img, np.linspace(-200, -60, 8), cmap='inferno', extend='both')
-        fig1.canvas.draw()
    
     # Add interaction
     wdg.interactive(
@@ -4960,11 +5054,16 @@ def radar_range_snr(
         sub_controls1_box = wdg.VBox(sub_controls1_title + sub_controls1, layout=BOX_LAYOUT)
         controls_box.append(sub_controls1_box)
        
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '700px', '350px']
             )
@@ -4973,10 +5072,9 @@ def radar_range_snr(
     # Plot
     def plot(freq, energy, radius, noise_temp):
         img = rd.to_db(rd.rx_snr(range_mesh_m, energy, freq*1E6, noise_temp, gain=rd.dish_gain(radius, freq*1E6)**2, rcs=rcs_mesh_lin))
-        for art in ax1.artists:
-            art.remove()
+        for coll in ax1.collections:
+            coll.remove()
         ax1.contourf(range_bin, rcs_bin, img, np.linspace(-10, 60, 8), cmap='inferno', extend='both')
-        fig1.canvas.draw()
    
     # Add interaction
     wdg.interactive(
@@ -5106,11 +5204,16 @@ def radar_wave(
         run_box = wdg.VBox(run_title + run_controls, layout=BOX_LAYOUT)
         controls_box.append(run_box)   
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -5286,11 +5389,16 @@ def range_res(
         wave_box = wdg.VBox(wave_title + wave_controls, layout=BOX_LAYOUT)
         controls_box.append(wave_box)
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -5592,13 +5700,20 @@ def ranging(
         run_box = wdg.VBox(run_title + run_controls, layout=BOX_LAYOUT)
         controls_box.append(run_box)   
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
-        display(wdg.AppLayout(
-            center=fig1.canvas, 
+        display(
+            wdg.AppLayout(
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
-        ))       
+            )
+        )    
     
     # Plot
     def animate(frame, rx_az, rx_beamw, tx_az, tx_beamw, tgt_x, tgt_y):
@@ -5885,11 +6000,16 @@ def rdi(
     # Add block
     controls_box.append(wdg.VBox(block2))
     
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -6039,11 +6159,16 @@ def rect_pat(
         sub_controls1_box = wdg.VBox(sub_controls1_title + sub_controls1, layout=BOX_LAYOUT)
         controls_box.append(sub_controls1_box)
        
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -6140,15 +6265,20 @@ def roc(
         roc_box = wdg.VBox(roc_title + roc_controls, layout=BOX_LAYOUT)
         controls_box.append(roc_box) 
        
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
-        )    
+        ) 
 
     # Plot
     def plot(snr):
@@ -6260,11 +6390,16 @@ def sine(
         wave_box = wdg.VBox(wave_title + wave_controls, layout=BOX_LAYOUT)
         controls_box.append(wave_box)
                
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+            
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -6272,7 +6407,7 @@ def sine(
     else:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             pane_widths=[0, '600px', 0]
             )
         )
@@ -6450,13 +6585,20 @@ def sine_prop(
         run_box = wdg.VBox(run_title + run_controls, layout=BOX_LAYOUT)
         controls_box.append(run_box)   
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
-        display(wdg.AppLayout(
-            center=fig1.canvas, 
+        display(
+            wdg.AppLayout(
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
-        ))
+            )
+        )
 
     # Plot
     def animate(frame, freq, power):
@@ -6640,13 +6782,20 @@ def sine_prop_generic(
         run_box = wdg.VBox(run_title + run_controls, layout=BOX_LAYOUT)
         controls_box.append(run_box)   
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
-        display(wdg.AppLayout(
-            center=fig1.canvas, 
+        display(
+            wdg.AppLayout(
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
-        ))
+            )
+        )
 
     # Plot
     def animate(frame, freq, power):
@@ -6858,11 +7007,16 @@ def sine_pulse(
         wave_box = wdg.VBox(wave_title + wave_controls, layout=BOX_LAYOUT)
         controls_box.append(wave_box)
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '700px', '350px']
             )
@@ -7003,11 +7157,16 @@ def snr(
         sub_controls1_box = wdg.VBox(sub_controls1_title + sub_controls1, layout=BOX_LAYOUT)
         controls_box.append(sub_controls1_box)
        
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -7015,7 +7174,7 @@ def snr(
     else:
         display(
             wdg.AppLayout(
-            center=fig1.canvas, 
+            center=out_wdg, 
             pane_widths=[0, '600px', 0]
             )
         )
@@ -7181,11 +7340,16 @@ def threshold(
         det_box = wdg.VBox(det_title + det_controls, layout=BOX_LAYOUT)
         controls_box.append(det_box)
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig.canvas)
+    
     # Display widgets
     if controls_box:
         display(
             wdg.AppLayout(
-            center=fig.canvas, 
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
             )
@@ -7347,12 +7511,20 @@ def wave(
         run_box = wdg.VBox(run_title + run_controls, layout=BOX_LAYOUT)
         controls_box.append(run_box)   
         
+    # Canvas widget
+    out_wdg = wdg.Output()
+    with out_wdg:
+        display(fig1.canvas)
+    
     # Display widgets
-        display(wdg.AppLayout(
-            center=fig1.canvas, 
+    if controls_box:
+        display(
+            wdg.AppLayout(
+            center=out_wdg, 
             right_sidebar=wdg.VBox(controls_box),
             pane_widths=[0, '600px', '350px']
-        ))
+            )
+        )
 
     # Plot
     def animate(frame, freq, propvel):

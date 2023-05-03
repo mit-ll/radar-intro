@@ -174,7 +174,7 @@ def new_plot(*argv, **kwarg):
         )
     fig.canvas.header_visible = False
     ax = pyp.axes(
-        [(1 - axes_width)/2, (1 - axes_height)/2, axes_width, axes_height],
+        [(1 - axes_width)/2, (1 - axes_height)*0.75, axes_width, axes_height],
         facecolor = face, 
         frame_on = True,
         projection = projection
