@@ -39,7 +39,7 @@ from matplotlib import rc
 import matplotlib.ticker as tck
 import numpy as np
 
-DEF_SANS = ['Segoe UI', 'Arial', 'FreeSans', 'DejaVu Sans']
+DEF_SANS = ['Segoe UI', 'Arial', 'DejaVu Sans']
 
 def _format_ax(ax, present=False):
     
