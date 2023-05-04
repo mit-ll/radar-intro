@@ -31,6 +31,8 @@ authorized by the U.S. Government may violate any copyrights that exist in this 
 RAMS ID: 1016938
 """
 
+import logging
+
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as pyp
 from matplotlib.axes import Axes
@@ -141,6 +143,9 @@ def new_plot(*argv, **kwarg):
         'size' : 14.0
         }
     rc(('font'), **font_prop)
+    
+    # Suppress font messages
+    logging.getLogger('matplotlib.font_manager').setLevel(logging.ERROR)
     
     # Disable open figure warning
     rc('figure', max_open_warning=0)
