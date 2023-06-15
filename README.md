@@ -94,7 +94,7 @@ Next, we will install the necessary prerequisite packages. To do this, we move t
 
 ### Radar Course
 
-To start the labs, we first starting with new terminal/command prompt and type:
+To start the labs, we first start with a new terminal/command prompt and type:
 
     cd <venv-dir>
     source ./bin/activate
@@ -146,7 +146,7 @@ Next, we will install the necessary prerequisite packages. To do this, we move t
 
 ### Radar Course
 
-To start the labs, we first starting with new terminal/command prompt and type:
+To start the labs, we first start with a new terminal/command prompt and type:
 
     cd <venv-dir>
     source ./bin/activate
