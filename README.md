@@ -44,7 +44,7 @@ Next, we will install the necessary prerequisite packages. To do this, we move t
 
 ### Radar Course
 
-To start the labs, we first starting with new terminal/command prompt and activating the virtual environment by typing:
+To start the labs, we first start with a new terminal/command prompt and activating the virtual environment by typing:
 
     cd <venv-dir>
     .\Scripts\activate
