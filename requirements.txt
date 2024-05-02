@@ -1,4 +1,4 @@
-jupyterlab >=3.6.4, <4
+jupyterlab
 jupyterlab-mathjax3
 numpy
 scipy
