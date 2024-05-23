@@ -1,5 +1,6 @@
 jupyterlab
 jupyterlab-mathjax3
+jupyterlab-hide-code
 numpy
 scipy
 matplotlib
