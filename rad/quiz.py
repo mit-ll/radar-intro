@@ -54,7 +54,7 @@ def new_quiz(prompt, val, abs_tol=None, rel_tol=1E-2):
     Outputs:
     (none)
     """
-    title = wdg.HTML(value = f"<p><font color='black'>{prompt}</p>")
+    title = wdg.HTML(value = f"<font color='black'>{prompt}")
     answer = wdg.FloatText()
     submit = wdg.Button(description="Submit")
     result = wdg.HTML(value = f"<b><font color='black'>Ready</b>")
@@ -80,8 +80,15 @@ def quiz_1_1_1():
     tol = 0.01
     new_quiz(prompt, val, rel_tol=tol)
 
-# Q1.1.2
-def quiz_1_1_2():
+# Q1.1.2a
+def quiz_1_1_2a():
+    prompt = 'Enter answer:'
+    val = (3*7.1 - 5.2)
+    tol = 0.01
+    new_quiz(prompt, val, rel_tol=tol)
+
+# Q1.1.2b
+def quiz_1_1_2b():
     prompt = 'Enter answer:'
     val = (math.log10(2.72**3) + math.cos(4*math.pi/7))
     tol = 0.01
@@ -96,55 +103,69 @@ def quiz_1_1_3():
     
 # Q1.1.4a
 def quiz_1_1_4a():
-    prompt = 'Enter answer (in dB):'
-    val = rd.to_db(1.5E5)
+    prompt = 'Enter value of y:'
+    val = 15.2/-10 + 1.2
     tol = 0.01
     new_quiz(prompt, val, rel_tol=tol)
     
 # Q1.1.4b
 def quiz_1_1_4b():
-    prompt = 'Enter answer (in dB):'
-    val = rd.to_db(7.2E-7)
+    prompt = 'Enter value of y:'
+    val = math.cos(5*math.pi/2 + -0.1)
     tol = 0.01
-    new_quiz(prompt, val, rel_tol=tol) 
-
+    new_quiz(prompt, val, rel_tol=tol)     
+    
 # Q1.1.5a
 def quiz_1_1_5a():
-    prompt = 'Enter answer:'
-    val = rd.from_db(51.2)
+    prompt = 'Enter answer (in dB):'
+    val = rd.to_db(1.5E5)
     tol = 0.01
     new_quiz(prompt, val, rel_tol=tol)
     
 # Q1.1.5b
 def quiz_1_1_5b():
+    prompt = 'Enter answer (in dB):'
+    val = rd.to_db(7.2E-7)
+    tol = 0.01
+    new_quiz(prompt, val, rel_tol=tol) 
+
+# Q1.1.6a
+def quiz_1_1_6a():
+    prompt = 'Enter answer:'
+    val = rd.from_db(51.2)
+    tol = 0.01
+    new_quiz(prompt, val, rel_tol=tol)
+    
+# Q1.1.6b
+def quiz_1_1_6b():
     prompt = 'Enter answer:'
     val = rd.from_db(-20.1)
     tol = 0.01
     new_quiz(prompt, val, rel_tol=tol) 
     
-# Q1.1.6
-def quiz_1_1_6():
+# Q1.1.7
+def quiz_1_1_7():
     prompt = 'Enter answer (in dB):'
     val = rd.to_db(3.7**5)
     tol = 0.01
     new_quiz(prompt, val, rel_tol=tol)
     
-# Q1.1.7a
-def quiz_1_1_7a():
+# Q1.1.8a
+def quiz_1_1_8a():
     prompt = 'Enter answer:'
     val = 3
     tol = 0.01
     new_quiz(prompt, val, rel_tol=tol)
     
-# Q1.1.7b
-def quiz_1_1_7b():
+# Q1.1.8b
+def quiz_1_1_8b():
     prompt = 'Enter answer (in s, within ±0.05 s):'
     val = 0.5
     tol = 0.05
     new_quiz(prompt, val, abs_tol=tol)
     
-# Q1.1.7c
-def quiz_1_1_7c():
+# Q1.1.8c
+def quiz_1_1_8c():
     prompt = 'Enter answer (in Hz, within ±0.2 Hz):'
     val = 2
     tol = 0.2
