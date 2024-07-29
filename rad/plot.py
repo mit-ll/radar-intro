@@ -181,7 +181,6 @@ def new_plot(*argv, **kwarg):
     ax = pyp.axes(
         [(1 - axes_width)/2, (1 - axes_height)*0.75, axes_width, axes_height],
         facecolor = face, 
-        frame_on = True,
         projection = projection
         )
     
@@ -273,7 +272,6 @@ def new_plot3(*argv, **kwarg):
     ax = pyp.axes(
         [0.1667, 0.1286, 0.6667, 0.8071],
         facecolor=face, 
-        frame_on=True,
         projection='3d'
         )
 
@@ -380,7 +378,6 @@ def new_plot_text(*argv, **kwarg):
     ax = pyp.axes(
         [0.1667, 0.1286, 0.5, 0.8071],
         facecolor = face, 
-        frame_on = True
         )
 
     # Title
@@ -474,7 +471,6 @@ def new_rad_plot(*argv, **kwarg):
     ax_scan = fig_scan.add_axes(
         [0.05, 0.025, 0.93, 0.93],
         facecolor=face, 
-        frame_on=True,
         projection='polar'
         )
     fig_pulse = pyp.figure(
@@ -487,7 +483,6 @@ def new_rad_plot(*argv, **kwarg):
     ax_pulse = fig_pulse.add_axes(
         [0.1, 0.27, 0.85, 0.7],
         facecolor=face, 
-        frame_on=True,
         projection='rectilinear'
         )
 
