@@ -3815,9 +3815,9 @@ def pol(
     # Wave
     r0 = np.linspace(xlim[0], xlim[1], num_step)
     hdata = np.zeros((3*num_step))
-    hdata[2::3] = np.NAN
+    hdata[2::3] = np.nan
     vdata = np.zeros((3*num_step))
-    vdata[2::3] = np.NAN
+    vdata[2::3] = np.nan
     rdata = np.zeros((3*num_step))
     rdata[0::3] = r0
     rdata[1::3] = r0

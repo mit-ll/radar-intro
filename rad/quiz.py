@@ -429,28 +429,28 @@ def quiz_3_1_2b():
 def quiz_3_1_3a():
     prompt = 'Enter delay (in ns):'
     val = -2.83
-    tol = 0.01
+    tol = 0.04
     new_quiz(prompt, val, abs_tol=tol)
     
 # Q3.1.3b
 def quiz_3_1_3b():
     prompt = 'Enter delay (in ns):'
     val = -2.83
-    tol = 0.01
+    tol = 0.04
     new_quiz(prompt, val, abs_tol=tol)
     
 # Q3.1.4a
 def quiz_3_1_4a():
     prompt = 'Enter phase (in deg):'
     val = 168
-    tol = 1
+    tol = 2
     new_quiz(prompt, val, abs_tol=tol)
     
 # Q3.1.4b
 def quiz_3_1_4b():
     prompt = 'Enter phase (in deg):'
     val = 120
-    tol = 1
+    tol = 2
     new_quiz(prompt, val, abs_tol=tol)
     
 # Q3.1.5
