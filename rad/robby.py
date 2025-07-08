@@ -34,11 +34,9 @@ RAMS ID: 1016938
 # Imports
 from IPython.display import display
 import ipywidgets as wdg
-from matplotlib.axes import Axes
 import matplotlib.pyplot as pyp
 import numpy as np
 from numpy.random import randn
-from typing import Union, List
 import rad.plot as pl
 import rad.radar as rd
 import rad.const as cnst
@@ -54,7 +52,7 @@ def pulse(
     min_range: float,
     noise_power: float,
     num_integ: int,
-    targets: List[Target],
+    targets: list[Target],
     time: float,
     az: float,
     range_bins
@@ -72,7 +70,7 @@ def pulse(
     - min_range [float]: Minimum observable range (m)
     - noise_power [float]: System noise power (W)
     - num_integ [int]: Number of integrated pulses
-    - targets [List[Target]]: List of Targets
+    - targets [list[Target]]: List of Targets
     - time [float]: Time (s)
     - az [float]: Transmit azimuth (rad)
     - range_bins [ArrayLike]: Range bins (m)
@@ -143,7 +141,7 @@ def robby(
     reset: bool = False,
     scan_rate: float = 5,
     show_price: bool = False,
-    targets: List[Target] = None,
+    targets: list[Target] | None = None,
     widgets = ['bandw', 'coherent', 'det_thresh', 'freq', 'energy', 'noise_temp', 'num_integ', 'prf', 'radius', 'scan_rate'] # 'test_targ'
     ):
     """
@@ -167,8 +165,8 @@ def robby(
     - reset [bool]: Flag for reset button; default False
     - scan_rate [float]: Scan rate (scans/min); default 5 scans/min
     - show_price [bool]: Flat for price display; default False
-    - targets [List[Target]]: List of Targets; default None
-    - widgets [List[str]]: List of desired widgets
+    - targets [list[Target]]: list of Targets; default None
+    - widgets [list[str]]: list of desired widgets
     
     Outputs:
     (none)
@@ -284,7 +282,7 @@ def robby(
         
     rad_controls_box = []
     if rad_controls:
-        rad_controls_title = [wdg.HTML(value = f"<b><font color='black'>Radar</b>")]
+        rad_controls_title = [wdg.HTML(value = "<b><font color='black'>Radar</b>")]
         rad_controls_box = wdg.VBox(rad_controls_title + rad_controls, layout=box_layout)
         controls_box.append(rad_controls_box)
         
@@ -323,7 +321,7 @@ def robby(
         
     tx_controls_box = []
     if tx_controls:
-        tx_controls_title = [wdg.HTML(value = f"<b><font color='black'>Transmission</b>")]
+        tx_controls_title = [wdg.HTML(value = "<b><font color='black'>Transmission</b>")]
         tx_controls_box = wdg.VBox(tx_controls_title + tx_controls, layout=box_layout)
        
     # Processing controls
@@ -368,7 +366,7 @@ def robby(
 
     proc_controls_box = []
     if proc_controls:
-        proc_controls_title = [wdg.HTML(value = f"<b><font color='black'>Processing</b>")]
+        proc_controls_title = [wdg.HTML(value = "<b><font color='black'>Processing</b>")]
         proc_controls_box = wdg.VBox(proc_controls_title + proc_controls, layout=box_layout)
         if tx_controls:
             controls_box.append(wdg.VBox([tx_controls_box, proc_controls_box]))
@@ -387,7 +385,7 @@ def robby(
 
     oper_controls_box = []
     if oper_controls:
-        oper_controls_title = [wdg.HTML(value = f"<b><font color='black'>Operation</b>")]
+        oper_controls_title = [wdg.HTML(value = "<b><font color='black'>Operation</b>")]
         oper_controls_box = wdg.VBox(oper_controls_title + oper_controls, layout=box_layout)
         controls_box.append(oper_controls_box)
     
@@ -401,7 +399,7 @@ def robby(
         style=style, 
         readout_format='.2f'
     )
-    az_pulse_title = wdg.HTML(value = f"<b><font color='black'>Pulse Display</b>")
+    az_pulse_title = wdg.HTML(value = "<b><font color='black'>Pulse Display</b>")
     pulse_disp_box = [az_pulse_title, az_pulse_wdg]
     
     # Test targets
@@ -445,7 +443,7 @@ def robby(
         
     target_controls_box = []
     if target_controls:
-        target_controls_title = [wdg.HTML(value = f"<b><font color='black'>Targets</b>")]
+        target_controls_title = [wdg.HTML(value = "<b><font color='black'>Targets</b>")]
         target_controls_box = wdg.VBox(target_controls_title + target_controls, layout=box_layout)
         controls_box.append(target_controls_box)
         
@@ -470,7 +468,7 @@ def robby(
                 radius=radius,
                 scan_rate=scan_rate
             )
-            price_wdg = wdg.HTML(value=f"")
+            price_wdg = wdg.HTML(value="")
             if price0 <= max_price:
                 price_wdg.value = f"<font color=\"DarkGreen\"><h2>Price: ${price0:.2f}</h2></font>"
             else:
@@ -483,12 +481,12 @@ def robby(
                 wdg.AppLayout(
                 center=fig_scan.canvas, 
                 right_sidebar=wdg.VBox(controls_box),
-                pane_widths=[0, '810px', '350px']
+                pane_widths=[0, '820px', '350px']
                 ),
                 wdg.AppLayout(
                 center=fig_pulse.canvas, 
                 right_sidebar=wdg.VBox(pulse_disp_box),
-                pane_widths=[0, '810px', '350px']
+                pane_widths=[0, '820px', '350px']
                 ),
             ])      
         )
@@ -518,7 +516,7 @@ def robby(
     pc.set_clim(min_scan_snr, max_scan_snr)
 
     # Colorbar
-    cbar = pyp.colorbar(pc, ax=ax_scan, shrink=0.5, pad=0.1)
+    cbar = fig_scan.colorbar(pc, ax=ax_scan, shrink=0.5, pad=0.1)
     cbar.ax.set_ylabel('Signal-to-Noise Ratio (dB)', size=12, name=pl.DEF_SANS)
         
     # Detections

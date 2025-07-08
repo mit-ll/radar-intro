@@ -31,13 +31,7 @@ authorized by the U.S. Government may violate any copyrights that exist in this 
 RAMS ID: 1016938
 """
 
-from IPython.display import display, HTML
-import ipywidgets as wdg
-import matplotlib.patches as ptch
-import matplotlib.pyplot as pyp
 import rad.air as air
-import rad.plot as plt
-import rad.const as cnst
 import rad.radar as rd
 import rad.robby as rby
 import rad.toys as ts
@@ -428,13 +422,7 @@ def ex_4_1_7():
 def ex_4_2_1():
     
     # Test route
-    test_route = air.Route()
-    test_route.start = np.array([-10E3, 0])
-    test_route.end = np.array([0, 10E3])
-    test_route.lifetime = 100
-    test_route.vel = (test_route.end - test_route.start)/test_route.lifetime
-    test_route.speed = np.sqrt(test_route.vel[0]**2 + test_route.vel[1]**2)
-    test_route.max_range = 10E3
+    test_route = air.Route(start=np.array([-10E3, 0]), end=np.array([0, 10E3]), lifetime=100, max_range=10e3)
     
     # Plot and return
     rby.robby(
@@ -546,13 +534,12 @@ def ex_5_1_2b():
 def ex_5_1_3a():
     
     # Test route
-    test_route = air.Route()
-    test_route.start = np.array([-10E3, 0])
-    test_route.end = np.array([0, 10E3])
-    test_route.lifetime = 100
-    test_route.vel = (test_route.end - test_route.start)/test_route.lifetime
-    test_route.speed = np.sqrt(test_route.vel[0]**2 + test_route.vel[1]**2)
-    test_route.max_range = 10E3
+    test_route = air.Route(
+        start=np.array([-10E3, 0]),
+        end=np.array([0, 10E3]),
+        lifetime=100,
+        max_range=10e3,
+    )
     
     # Plot and return
     air.plot_routes([test_route])

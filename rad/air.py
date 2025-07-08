@@ -31,10 +31,10 @@ authorized by the U.S. Government may violate any copyrights that exist in this 
 RAMS ID: 1016938
 """
 
-from math import atan2
 from matplotlib.patches import Circle
 import numpy as np
 from numpy.random import permutation, rand, randint
+from numpy.typing import ArrayLike, NDArray
 import rad.plot as plt
 import rad.radar as rd
 from typing import List
@@ -46,13 +46,28 @@ class Route():
     """
     Container class for air traffic route.
     """
-    def __init__(self):
-        self.start = None
-        self.end = None
-        self.vel = None
-        self.speed = None
-        self.lifetime = None
-        self.max_range = None
+    def __init__(
+        self,
+        start: ArrayLike,
+        end: ArrayLike,
+        lifetime: float,
+        max_range: float,
+        ):
+        self.start: NDArray = np.asanyarray(start)
+        self.end: NDArray = np.asanyarray(end)
+        self.lifetime: float = lifetime
+        self.max_range: float = max_range
+
+    @property
+    def speed(self) -> float:
+        """Air speed."""
+        vel_curr = self.vel
+        return float(np.sqrt(vel_curr[0]**2 + vel_curr[1]**2))
+
+    @property
+    def vel(self) -> NDArray:
+        """Velocity vector."""
+        return (self.end - self.start)/self.lifetime
 
 def plot_routes(
     routes: List[Route]
@@ -107,7 +122,7 @@ def routes(n, max_range, avg_speed):
     out = []
     
     # Draw routes
-    for ii in range(n):
+    for _ in range(n):
         
         # Draw starting side
         start_side = randint(low=0, high=N_SIDE)
@@ -135,6 +150,9 @@ def routes(n, max_range, avg_speed):
         elif (start_side == 3):
             start_x = -max_range
             start_y = start_alpha*2*max_range - max_range
+        else:
+            start_x = 0
+            start_y = 0
         
         # Build end point
         if (end_side == 0):
@@ -149,23 +167,19 @@ def routes(n, max_range, avg_speed):
         elif (end_side == 3):
             end_x = -max_range
             end_y = end_alpha*2*max_range - max_range
+        else:
+            end_x = 0
+            end_y = 0
             
-        # Velocity
-        vel_x = end_x - start_x
-        vel_y = end_y - start_y
-        vel_norm = np.sqrt(vel_x**2 + vel_y**2)
-        vel_x = avg_speed*vel_x/vel_norm
-        vel_y = avg_speed*vel_y/vel_norm
-        
         # Make route
-        rt = Route()
-        rt.start = np.array([start_x, start_y])
-        rt.end = np.array([end_x, end_y])
-        rt.vel = np.array([vel_x, vel_y])
-        rt.speed = avg_speed
-        rt.lifetime = np.sqrt((start_x - end_x)**2 + (start_y - end_y)**2)/avg_speed
-        rt.max_range = max_range
-        
+        lifetime = np.sqrt((start_x - end_x)**2 + (start_y - end_y)**2)/avg_speed
+        rt = Route(
+            start=np.array([start_x, start_y]), 
+            end=np.array([end_x, end_y]), 
+            lifetime=lifetime, 
+            max_range=max_range
+            )
+   
         # Add to output
         out.append(rt)
 

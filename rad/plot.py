@@ -53,11 +53,11 @@ def _format_ax(ax, present=False):
 
     # Color scheme
     if (present):
-        face = [0, 0, 0]
-        edge = [1, 1, 1]
+        face = (0, 0, 0)
+        edge = (1, 1, 1)
     else:
-        face = [1, 1, 1]
-        edge = [0, 0, 0] 
+        face = (1, 1, 1)
+        edge = (0, 0, 0) 
     
     # Title
     ax.set_title(
@@ -132,8 +132,8 @@ def new_plot(*argv, **kwarg):
         layout = kwarg['layout']
     
     # Face and edge colors
-    face = [1, 1, 1]
-    edge = [0, 0, 0]
+    face = (1, 1, 1)
+    edge = (0, 0, 0)
 
     # Set font to available sans serif
     font_prop = {
@@ -200,11 +200,11 @@ def new_plot2(**kwarg):
     
     present = False
     if (present):
-        face = [0, 0, 0]
-        edge = [1, 1, 1]
+        face = (0, 0, 0)
+        edge = (1, 1, 1)
     else:
-        face = [1, 1, 1]
-        edge = [0, 0, 0]
+        face = (1, 1, 1)
+        edge = (0, 0, 0)
 
     # Set font to Arial
     font_prop = {
@@ -247,11 +247,11 @@ def new_plot3(*argv, **kwarg):
 
     present = False
     if (present):
-        face = [0, 0, 0]
-        edge = [1, 1, 1]
+        face = (0, 0, 0)
+        edge = (1, 1, 1)
     else:
-        face = [1, 1, 1]
-        edge = [0, 0, 0]
+        face = (1, 1, 1)
+        edge = (0, 0, 0)
 
     # Set font to Arial
     font_prop = {
@@ -352,11 +352,11 @@ def new_plot_text(*argv, **kwarg):
 
     present = False
     if (present):
-        face = [0, 0, 0]
-        edge = [1, 1, 1]
+        face = (0, 0, 0)
+        edge = (1, 1, 1)
     else:
-        face = [1, 1, 1]
-        edge = [0, 0, 0]
+        face = (1, 1, 1)
+        edge = (0, 0, 0)
 
     # Set font to Arial
     font_prop = {
@@ -443,11 +443,11 @@ def new_rad_plot(*argv, **kwarg):
 
     present = False
     if (present):
-        face = [0, 0, 0]
-        edge = [1, 1, 1]
+        face = (0, 0, 0)
+        edge = (1, 1, 1)
     else:
-        face = [1, 1, 1]
-        edge = [0, 0, 0]
+        face = (1, 1, 1)
+        edge = (0, 0, 0)
 
     # Set font to Arial
     font_prop = {
@@ -469,7 +469,7 @@ def new_rad_plot(*argv, **kwarg):
         )
     fig_scan.canvas.header_visible = False
     ax_scan = fig_scan.add_axes(
-        [0.05, 0.025, 0.93, 0.93],
+        (0.05, 0.025, 0.93, 0.93),
         facecolor=face, 
         projection='polar'
         )
@@ -481,7 +481,7 @@ def new_rad_plot(*argv, **kwarg):
         )
     fig_pulse.canvas.header_visible = False
     ax_pulse = fig_pulse.add_axes(
-        [0.1, 0.27, 0.85, 0.7],
+        (0.1, 0.27, 0.85, 0.7),
         facecolor=face, 
         projection='rectilinear'
         )

@@ -34,3 +34,4 @@ rad/__pycache__/
 .ipynb_checkpoints/
 env/
 .venv/
+.vscode/
