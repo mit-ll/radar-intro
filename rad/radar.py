@@ -728,9 +728,10 @@ def to_db(x):
     if np.isscalar(x):
         if np.abs(x) < 1E-40:
             return -400
+        return float(10*np.log10(np.abs(x)))
     else:
         x[np.abs(x) < 1E-40] = 1E-40
-    return 10*np.log10(np.abs(x))
+        return 10*np.log10(np.abs(x))
         
 def wavelen(freq, propvel=cnst.c):
     """
