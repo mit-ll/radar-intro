@@ -229,7 +229,7 @@ def robby(
             max=1200, 
             step=10, 
             value=noise_temp, 
-            description="Noise Temperature (°K)", 
+            description="Noise Temperature (K)", 
             style=style, 
             readout_format='.2f'
         )
@@ -581,7 +581,7 @@ def robby(
         # Transmit bandwidth (Hz)
         bandw = bandw_wdg.value*1E6
         
-        # Noise temperature (°K)
+        # Noise temperature (K)
         noise_temp = noise_temp_wdg.value
         
         # Noise power (W)
